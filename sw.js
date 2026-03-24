@@ -1,4 +1,4 @@
-const APP_VERSION = '1.7.85';
+const APP_VERSION = '1.7.90';
 const CACHE_NAME = `knowlet-${APP_VERSION}`;
 const IGNORE_PARAMS_FOR = '/navigator';
 const STATIC_ASSETS = [
@@ -19,26 +19,26 @@ const STATIC_ASSETS = [
     '/search',
     '/navigator',
 
-    '/assets/styles/style.css',
-    '/assets/styles/favourite.css',
-    '/assets/styles/history.css',
-    '/assets/styles/profile.css',
-    '/assets/styles/login_signup.css',
-    '/assets/styles/profile_complition_form.css',
-    '/assets/styles/search.css',
-    '/assets/styles/navigator.css',
+    '/css/style.css',
+    '/css/favourite.css',
+    '/css/history.css',
+    '/css/profile.css',
+    '/css/login_signup.css',
+    '/css/profile_complition_form.css',
+    '/css/search.css',
+    '/css/navigator.css',
 
-    '/assets/scripts/script.js',
-    '/assets/scripts/favourite.js',
-    '/assets/scripts/history.js',
-    '/assets/scripts/profile.js',
-    '/assets/scripts/login_signup.js',
-    '/assets/scripts/profile_complition_form.js',
-    '/assets/scripts/search.js',
-    '/assets/scripts/navigator.js',
+    '/js/script.js',
+    '/js/favourite.js',
+    '/js/history.js',
+    '/js/profile.js',
+    '/js/login_signup.js',
+    '/js/profile_complition_form.js',
+    '/js/search.js',
+    '/js/navigator.js',
 
-    '/assets/styles/units.css',
-    '/assets/scripts/units.js',
+    '/css/core.css',
+    '/js/core.js',
 
     '/assets/notes.json',
     '/assets/pyq.json'
