@@ -41,7 +41,6 @@ async function sendRequest() {
 
     const input = document.getElementById("inputText");
     const text = input.value.trim();
-    const difficulty = document.getElementById("difficulty").value;
 
     if (!text) return;
 
@@ -56,7 +55,7 @@ async function sendRequest() {
             headers: {
                 "Content-Type": "application/json"
             },
-            body: JSON.stringify({ text, difficulty })
+            body: JSON.stringify({ text })
         });
 
         const data = await res.json();
