@@ -77,19 +77,18 @@ STRICT RULES:
 - NO explanations or extra text
 - Start with [ and end with ]
 - Exactly 4 options per question
-- Answer must be "A", "B", "C", or "D"
 
 FORMAT:
 [
   {
     "question": "string",
     "options": [
-      "A) option text",
-      "B) option text",
-      "C) option text",
-      "D) option text"
+      "option text",
+      "option text",
+      "option text",
+      "option text"
     ],
-    "answer": "A"
+    "answer": "option test"
   }
 ]
 
