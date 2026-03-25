@@ -1,6 +1,6 @@
 import { GoogleGenerativeAI } from "@google/generative-ai";
 
-const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
+const genAI = new GoogleGenerativeAI(process.env.GOOGLE_AI_API_KEY);
 
 export default async (request) => {
 
@@ -8,51 +8,76 @@ export default async (request) => {
     if (request.method === "OPTIONS") {
         return new Response(null, {
             status: 204,
-            headers: {
-                "Access-Control-Allow-Origin": "*",
-                "Access-Control-Allow-Headers": "Content-Type",
-                "Access-Control-Allow-Methods": "POST, OPTIONS"
-            }
+            headers: corsHeaders()
         });
     }
 
     try {
         const body = await request.json();
-        const { text } = body;
+        const { text, difficulty = "medium" } = body;
 
         if (!text) {
             return new Response(
                 JSON.stringify({ success: false, error: "No text provided" }),
-                {
-                    status: 400,
-                    headers: {
-                        "Content-Type": "application/json",
-                        "Access-Control-Allow-Origin": "*"
-                    }
-                }
+                { status: 400, headers: corsHeaders() }
             );
         }
 
+        const lowerText = text.toLowerCase();
+
+        // ✅ Identity (NO AI CALL)
+        if (
+            lowerText.includes("who are you") ||
+            lowerText.includes("what are you") ||
+            lowerText.includes("who made you")
+        ) {
+            return new Response(
+                JSON.stringify({
+                    success: true,
+                    type: "identity",
+                    message: "I am Knowlet, an AI-powered learning assistant that helps students generate quizzes, understand concepts, and study more effectively."
+                }),
+                { status: 200, headers: corsHeaders() }
+            );
+        }
+
+        // ✅ Detect question vs notes
+        const isQuestion =
+            lowerText.endsWith("?") ||
+            lowerText.startsWith("what") ||
+            lowerText.startsWith("why") ||
+            lowerText.startsWith("how") ||
+            lowerText.startsWith("explain") ||
+            lowerText.startsWith("define");
+
         const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash" });
 
-        const prompt = `
+        // 🧠 Chat Prompt
+        const chatPrompt = `
+You are Knowlet, an AI learning assistant.
+
+Answer the user's question clearly and concisely.
+- Keep it simple and easy to understand
+- No unnecessary long explanations
+- No JSON, only plain text
+
+QUESTION:
+${text}
+`;
+
+        // 📘 Quiz Prompt
+        const quizPrompt = `
 You are a quiz generator for Knowlet.
 
-Your primary task is to create 5 multiple-choice questions (MCQs) from the given student notes.
+Create 5 ${difficulty}-level multiple-choice questions (MCQs) from the given student notes.
 
-STRICT RULES (must follow):
+STRICT RULES:
 - Output MUST be valid JSON
-- Do NOT include markdown (no \`\`\`)
-- Do NOT include explanations, headings, or extra text
-- Do NOT include trailing commas
-- The response MUST start with [ and end with ]
-- Each question must have exactly 4 options
-- Answer must be one of: "A", "B", "C", "D"
-
-SPECIAL BEHAVIOR:
-- If the user asks about your identity (e.g., "who are you", "what are you", "who made you"), respond with:
-"I am Knowlet, an AI-powered learning assistant that helps students generate quizzes, understand concepts, and study more effectively."
-- Do NOT return JSON in that case, only the above sentence.
+- NO markdown (no \`\`\`)
+- NO explanations or extra text
+- Start with [ and end with ]
+- Exactly 4 options per question
+- Answer must be "A", "B", "C", or "D"
 
 FORMAT:
 [
@@ -72,43 +97,55 @@ NOTES:
 ${text}
 `;
 
-        const result = await model.generateContent(prompt);
-        const response = await result.response;
-        const raw = response.text();
+        const prompt = isQuestion ? chatPrompt : quizPrompt;
 
-        let parsed;
+        // ✅ Retry logic
+        let raw = "";
+        let parsed = null;
 
-        try {
-            parsed = JSON.parse(raw);
-        } catch (err) {
-            return new Response(
-                JSON.stringify({
-                    success: false,
-                    error: "Invalid AI response",
-                    raw
-                }),
-                {
-                    status: 500,
-                    headers: {
-                        "Content-Type": "application/json",
-                        "Access-Control-Allow-Origin": "*"
-                    }
+        for (let attempt = 0; attempt < 3; attempt++) {
+            const result = await model.generateContent(prompt);
+            const response = await result.response;
+            raw = response.text();
+
+            // 🧠 Chat response (no parsing needed)
+            if (isQuestion) {
+                return new Response(
+                    JSON.stringify({
+                        success: true,
+                        type: "chat",
+                        message: raw.trim()
+                    }),
+                    { status: 200, headers: corsHeaders() }
+                );
+            }
+
+            // 📘 Quiz parsing
+            try {
+                const cleaned = cleanJSON(raw);
+                parsed = JSON.parse(cleaned);
+                break;
+            } catch (err) {
+                if (attempt === 2) {
+                    return new Response(
+                        JSON.stringify({
+                            success: false,
+                            error: "Invalid AI response after retries",
+                            raw
+                        }),
+                        { status: 500, headers: corsHeaders() }
+                    );
                 }
-            );
+            }
         }
 
         return new Response(
             JSON.stringify({
                 success: true,
+                type: "quiz",
                 quiz: parsed
             }),
-            {
-                status: 200,
-                headers: {
-                    "Content-Type": "application/json",
-                    "Access-Control-Allow-Origin": "*"
-                }
-            }
+            { status: 200, headers: corsHeaders() }
         );
 
     } catch (err) {
@@ -117,13 +154,25 @@ ${text}
                 success: false,
                 error: err.message
             }),
-            {
-                status: 500,
-                headers: {
-                    "Content-Type": "application/json",
-                    "Access-Control-Allow-Origin": "*"
-                }
-            }
+            { status: 500, headers: corsHeaders() }
         );
     }
 };
+
+// 🔧 Clean JSON
+function cleanJSON(raw) {
+    return raw
+        .replace(/```json/g, "")
+        .replace(/```/g, "")
+        .trim();
+}
+
+// 🔧 CORS Headers
+function corsHeaders() {
+    return {
+        "Content-Type": "application/json",
+        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Headers": "Content-Type",
+        "Access-Control-Allow-Methods": "POST, OPTIONS"
+    };
+}
