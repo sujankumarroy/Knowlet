@@ -148,10 +148,32 @@ ${text}
         );
 
     } catch (err) {
+        const message = err.message || "";
+
+        // 🚨 Quota / rate limit error
+        if (
+            message.includes("429") ||
+            message.toLowerCase().includes("quota") ||
+            message.toLowerCase().includes("too many requests")
+        ) {
+            const waitTime = extractRetryTime(message);
+
+            return new Response(
+                JSON.stringify({
+                    success: false,
+                    type: "rate_limit",
+                    message: `⏳ AI limit reached. Try again in ${waitTime} seconds.`,
+                    retryAfter: waitTime
+                }),
+                { status: 429, headers: corsHeaders() }
+            );
+        }
+
+        // ❌ Other errors
         return new Response(
             JSON.stringify({
                 success: false,
-                error: err.message
+                error: "Something went wrong. Please try again."
             }),
             { status: 500, headers: corsHeaders() }
         );
@@ -174,4 +196,9 @@ function corsHeaders() {
         "Access-Control-Allow-Headers": "Content-Type",
         "Access-Control-Allow-Methods": "POST, OPTIONS"
     };
+}
+
+function extractRetryTime(errorMessage) {
+    const match = errorMessage.match(/retryDelay":"(\d+)s"/);
+    return match ? parseInt(match[1]) : 20; // default 20s
 }
