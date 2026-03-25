@@ -7,23 +7,22 @@
     <link rel="stylesheet" href="css/assistant.css">
 </head>
 <body>
-    <div class="container">
-        <h1>Knowlet AI</h1>
+    <div class="chat-container">
+        <div id="chatBox" class="chat-box"></div>
 
-        <textarea id="inputText" placeholder="Enter notes or ask a question..."></textarea>
+        <div class="input-area">
+            <textarea id="inputText" placeholder="Type a message..."></textarea>
 
-        <select id="difficulty">
-            <option value="easy">Easy Quiz</option>
-            <option value="medium" selected>Medium Quiz</option>
-            <option value="hard">Hard Quiz</option>
-        </select>
+            <select id="difficulty">
+                <option value="easy">Easy</option>
+                <option value="medium" selected>Medium</option>
+                <option value="hard">Hard</option>
+            </select>
 
-        <button onclick="sendRequest()">Generate</button>
-
-        <div class="loader" id="loader">Loading...</div>
-
-        <div class="output" id="output"></div>
+            <button onclick="sendRequest()">➤</button>
+        </div>
     </div>
+
     <script src="js/assistant.js"></script>
 </body>
 </html>

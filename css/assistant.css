@@ -1,76 +1,95 @@
 body {
+    margin: 0;
     font-family: Arial, sans-serif;
     background: #0f172a;
-    color: #fff;
-    margin: 0;
-    padding: 16px;
+    color: white;
 }
 
-.container {
-    max-width: 600px;
-    margin: auto;
+/* LAYOUT */
+.chat-container {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
 }
 
-h1 {
-    text-align: center;
-    font-size: 20px;
-    margin-bottom: 16px;
+/* CHAT BOX */
+.chat-box {
+    flex: 1;
+    overflow-y: auto;
+    padding: 12px;
+}
+
+/* MESSAGE */
+.message {
+    max-width: 75%;
+    padding: 10px;
+    border-radius: 12px;
+    margin: 6px 0;
+    line-height: 1.4;
+    word-wrap: break-word;
+}
+
+/* USER */
+.user {
+    background: #22c55e;
+    color: black;
+    margin-left: auto;
+}
+
+/* AI */
+.ai {
+    background: #1e293b;
+    margin-right: auto;
+}
+
+/* INPUT AREA */
+.input-area {
+    display: flex;
+    gap: 6px;
+    padding: 10px;
+    background: #020617;
 }
 
 textarea {
-    width: 100%;
-    height: 120px;
-    padding: 10px;
+    flex: 1;
+    height: 45px;
+    resize: none;
     border-radius: 8px;
     border: none;
-    outline: none;
-    resize: none;
+    padding: 8px;
     font-size: 14px;
 }
 
-select, button {
-    margin-top: 10px;
-    padding: 10px;
+select {
     border-radius: 8px;
-    border: none;
-    font-size: 14px;
+    padding: 5px;
 }
 
 button {
     background: #22c55e;
-    color: #000;
+    border: none;
+    border-radius: 8px;
+    padding: 0 14px;
     cursor: pointer;
-    width: 100%;
 }
 
 button:hover {
     opacity: 0.9;
 }
 
-.output {
-    margin-top: 20px;
-    padding: 12px;
-    background: #1e293b;
-    border-radius: 10px;
-    white-space: pre-wrap;
+/* QUIZ */
+label {
+    display: block;
+    margin: 4px 0;
 }
 
-.question {
-    margin-bottom: 16px;
-}
-
-.option {
-    margin-left: 10px;
-}
-
-.answer {
-    color: #22c55e;
+.result {
+    margin-top: 6px;
     font-weight: bold;
-    margin-top: 4px;
 }
 
+/* LOADER */
 .loader {
-    text-align: center;
-    margin-top: 10px;
-    display: none;
+    font-size: 12px;
+    opacity: 0.7;
 }
