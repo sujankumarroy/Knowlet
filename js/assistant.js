@@ -1,6 +1,6 @@
 let cooldown = false;
 
-const API_URL = "http://localhost:8888/.netlify/functions/gemini";
+const API_URL = "https://knowlet.in/.netlify/functions/gemini";
 
 /* ADD MESSAGE */
 function addMessage(text, sender) {

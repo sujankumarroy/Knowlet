@@ -173,6 +173,7 @@ ${text}
         return new Response(
             JSON.stringify({
                 success: false,
+                errObj: err,
                 error: "Something went wrong. Please try again."
             }),
             { status: 500, headers: corsHeaders() }
