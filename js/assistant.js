@@ -1,3 +1,5 @@
+let cooldown = false;
+
 const API_URL = "http://localhost:8888/.netlify/functions/gemini";
 
 /* ADD MESSAGE */
@@ -32,6 +34,11 @@ function removeLoader() {
 
 /* SEND REQUEST */
 async function sendRequest() {
+    if (cooldown) {
+        addMessage("⏳ Please wait before sending another message.", "ai");
+        return;
+    }
+
     const input = document.getElementById("inputText");
     const text = input.value.trim();
     const difficulty = document.getElementById("difficulty").value;
@@ -56,7 +63,14 @@ async function sendRequest() {
         removeLoader();
 
         if (!data.success) {
-            addMessage("Error: " + data.error, "ai");
+            // 🚨 Rate limit handling
+            if (data.type === "rate_limit") {
+                addMessage(data.message, "ai");
+                startCountdown(data.retryAfter);
+                return;
+            }
+
+            addMessage("⚠️ " + (data.error || "Something went wrong"), "ai");
             return;
         }
 
@@ -132,4 +146,25 @@ function checkAnswer(input, correct) {
         result.innerHTML = `❌ Wrong (Correct: ${correct})`;
         result.style.color = "red";
     }
+}
+
+function startCountdown(seconds) {
+    const button = document.querySelector("button");
+    cooldown = true;
+    button.disabled = true;
+
+    let timeLeft = seconds;
+
+    const interval = setInterval(() => {
+        button.innerText = `⏳ ${timeLeft}s`;
+
+        timeLeft--;
+
+        if (timeLeft < 0) {
+            clearInterval(interval);
+            button.innerText = "➤";
+            button.disabled = false;
+            cooldown = false;
+        }
+    }, 1000);
 }
