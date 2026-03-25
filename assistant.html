@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Knowlet AI</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="css/assistant.css">
+</head>
+<body>
+    <div class="chat-container">
+        <div id="chatBox" class="chat-box"></div>
+
+        <div class="input-area">
+            <textarea id="inputText" placeholder="Type a message..."></textarea>
+
+            <select id="difficulty">
+                <option value="easy">Easy</option>
+                <option value="medium" selected>Medium</option>
+                <option value="hard">Hard</option>
+            </select>
+
+            <button onclick="sendRequest()">➤</button>
+        </div>
+    </div>
+
+    <script src="js/assistant.js"></script>
+</body>
+</html>
