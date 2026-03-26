@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Knowlet AI</title>
+    <title>Knowlet Assistant</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="css/assistant.css">
 </head>
@@ -10,16 +10,16 @@
     <div class="chat-container">
         <div id="chatBox" class="chat-box"></div>
 
+        <!-- Toolbar -->
+        <div class="toolbar">
+            <button class="icon-btn" onclick="quizMode()">📋 Quiz</button>
+            <button class="icon-btn" onclick="normalMode()">💬 Normal</button>
+            <!-- Add more icons here if needed -->
+        </div>
+
         <div class="input-area">
             <textarea id="inputText" placeholder="Type a message..."></textarea>
-
-            <select id="difficulty">
-                <option value="easy">Easy</option>
-                <option value="medium" selected>Medium</option>
-                <option value="hard">Hard</option>
-            </select>
-
-            <button onclick="sendRequest()">➤</button>
+            <button id="btnSend" onclick="sendRequest()">➤</button>
         </div>
     </div>
 

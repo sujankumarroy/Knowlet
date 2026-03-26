@@ -1,6 +1,9 @@
 let cooldown = false;
+let mode = "normal";
 
-const API_URL = "https://knowlet.in/.netlify/functions/gemini";
+const input = document.getElementById("inputText");
+
+const API_URL = "http://localhost:8888/.netlify/functions/gemini";
 
 /* ADD MESSAGE */
 function addMessage(text, sender) {
@@ -41,7 +44,6 @@ async function sendRequest() {
 
     const input = document.getElementById("inputText");
     const text = input.value.trim();
-    const difficulty = document.getElementById("difficulty").value;
 
     if (!text) return;
 
@@ -56,7 +58,7 @@ async function sendRequest() {
             headers: {
                 "Content-Type": "application/json"
             },
-            body: JSON.stringify({ text, difficulty })
+            body: JSON.stringify({ text, mode })
         });
 
         const data = await res.json();
@@ -149,7 +151,7 @@ function checkAnswer(input, correct) {
 }
 
 function startCountdown(seconds) {
-    const button = document.querySelector("button");
+    const button = document.getElementById("btnSend");
     cooldown = true;
     button.disabled = true;
 
@@ -167,4 +169,14 @@ function startCountdown(seconds) {
             cooldown = false;
         }
     }, 1000);
+}
+
+function quizMode() {
+    mode = "quiz";
+    input.focus();
+}
+
+function normalMode() {
+    mode = "normal";
+    input.focus();
 }
