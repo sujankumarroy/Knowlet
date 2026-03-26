@@ -15,6 +15,7 @@ body {
     width: 100%;
     max-width: 600px;
     height: 90vh;
+    max-height: 1200px;
     border: 1px solid #334155;
     border-radius: 12px;
     overflow: hidden;
