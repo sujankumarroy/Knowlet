@@ -5,7 +5,7 @@ const input = document.getElementById("inputText");
 
 const API_URL = "http://localhost:8888/.netlify/functions/gemini";
 
-document.getElementById("quiz-mode").addEventListener("click", (e) => { quizMode(e.target); });
+document.getElementById("quiz-mode").addEventListener("click", (e) => activateMode(e.target, "quiz"));
 
 document.getElementById("clear-all").addEventListener("click", clearAll);
 
@@ -181,10 +181,10 @@ function clearAll() {
     chatBox.innerHTML = "";
 }
 
-function quizMode(btnQuiz) {
-    if (mode !== "quiz") {
+function activateMode(btnQuiz, m) {
+    if (mode !== m) {
         btnQuiz.classList.add("active");
-        mode = "quiz";
+        mode = m;
     } else {
         btnQuiz.classList.remove("active");
         mode = "normal";
