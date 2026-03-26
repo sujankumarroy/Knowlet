@@ -3,7 +3,30 @@ let mode = "normal";
 
 const input = document.getElementById("inputText");
 
+const quizMode = document.getElementById("quiz-mode");
+const normalMode = document.getElementById("normal-mode");
+const clearAll = document.getElementById("clear-all");
+
 const API_URL = "http://localhost:8888/.netlify/functions/gemini";
+
+const tools = {
+    quizMode: () => {
+        mode = "quiz";
+        input.focus();
+    },
+    normalMode: () => {
+        mode = "normal";
+        input.focus();
+    },
+    clearAll: () => {
+        const chatBox = document.getElementById("chatBox");
+        chatBox.innerHTML = "";
+    }
+};
+
+quizMode.addEventListener("click", tools.quizMode);
+normalMode.addEventListener("click", tools.normalMode);
+clearAll.addEventListener("click", tools.clearAll);
 
 /* ADD MESSAGE */
 function addMessage(text, sender) {
@@ -15,12 +38,6 @@ function addMessage(text, sender) {
 
     chatBox.appendChild(div);
     chatBox.scrollTop = chatBox.scrollHeight;
-}
-
-// CLEAR MESSAGE
-function clearAll() {
-    const chatBox = document.getElementById("chatBox");
-    chatBox.innerHTML = "";
 }
 
 /* LOADER */
@@ -175,14 +192,4 @@ function startCountdown(seconds) {
             cooldown = false;
         }
     }, 1000);
-}
-
-function quizMode() {
-    mode = "quiz";
-    input.focus();
-}
-
-function normalMode() {
-    mode = "normal";
-    input.focus();
 }
