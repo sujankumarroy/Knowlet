@@ -16,6 +16,13 @@ class NavBar {
                 </svg>
                 <span class="text">Favourite</span>
             </a>
+            <a href="/assistant" class="nav-item">
+                <svg class="icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none">
+                    <rect x="2" y="2" width="20" height="20" rx="6" fill="currentColor"/>
+                    <text x="50%" y="55%" text-anchor="middle" dominant-baseline="middle" font-size="10" font-family="Arial, sans-serif" fill="white" font-weight="600">AI</text>
+                </svg>
+                <span class="text">Assistant</span>
+            </a>
             <a href="/history" class="nav-item">
                 <svg class="icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
                     <path d="M13 3a9 9 0 0 0-9 9H1l4 4 4-4H6a7 7 0 1 1 7 7 c-1.93 0-3.68-.78-4.95-2.05l-1.42 1.42A8.96 8.96 0 1 0 13 3zm-1 5v5l4.25 2.52.75-1.23-3.5-2.04V8z"/>
