@@ -3,30 +3,11 @@ let mode = "normal";
 
 const input = document.getElementById("inputText");
 
-const quizMode = document.getElementById("quiz-mode");
-const normalMode = document.getElementById("normal-mode");
-const clearAll = document.getElementById("clear-all");
-
 const API_URL = "http://localhost:8888/.netlify/functions/gemini";
 
-const tools = {
-    quizMode: () => {
-        mode = "quiz";
-        input.focus();
-    },
-    normalMode: () => {
-        mode = "normal";
-        input.focus();
-    },
-    clearAll: () => {
-        const chatBox = document.getElementById("chatBox");
-        chatBox.innerHTML = "";
-    }
-};
+document.getElementById("quiz-mode").addEventListener("click", (e) => { quizMode(e.target); });
 
-quizMode.addEventListener("click", tools.quizMode);
-normalMode.addEventListener("click", tools.normalMode);
-clearAll.addEventListener("click", tools.clearAll);
+document.getElementById("clear-all").addEventListener("click", clearAll);
 
 /* ADD MESSAGE */
 function addMessage(text, sender) {
@@ -192,4 +173,20 @@ function startCountdown(seconds) {
             cooldown = false;
         }
     }, 1000);
+}
+
+/* TOOLS */
+function clearAll() {
+    const chatBox = document.getElementById("chatBox");
+    chatBox.innerHTML = "";
+}
+
+function quizMode(btnQuiz) {
+    if (mode !== "quiz") {
+        btnQuiz.classList.add("active");
+        mode = "quiz";
+    } else {
+        btnQuiz.classList.remove("active");
+        mode = "normal";
+    }
 }
