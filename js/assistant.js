@@ -1,6 +1,8 @@
 let cooldown = false;
 let mode = "normal";
 
+const input = document.getElementById("inputText");
+
 const API_URL = "https://knowlet.in/.netlify/functions/gemini";
 
 /* ADD MESSAGE */
@@ -169,16 +171,12 @@ function startCountdown(seconds) {
     }, 1000);
 }
 
-function startQuiz() {
-    addMessage("📝 Quiz mode activated!", "ai");
+function quizMode() {
     mode = "quiz";
-    const input = document.getElementById("inputText");
     input.focus();
 }
 
-function askQuestion() {
-    addMessage("❓ Ask mode activated!", "ai");
-    mode = "ask";
-    const input = document.getElementById("inputText");
+function normalMode() {
+    mode = "normal";
     input.focus();
 }
