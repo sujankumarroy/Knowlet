@@ -3,7 +3,7 @@ let mode = "normal";
 
 const input = document.getElementById("inputText");
 
-const API_URL = "https://knowlet.in/.netlify/functions/gemini";
+const API_URL = "http://localhost:8888/.netlify/functions/gemini";
 
 /* ADD MESSAGE */
 function addMessage(text, sender) {
@@ -151,7 +151,7 @@ function checkAnswer(input, correct) {
 }
 
 function startCountdown(seconds) {
-    const button = document.querySelector("button");
+    const button = document.getElementById("btnSend");
     cooldown = true;
     button.disabled = true;
 
