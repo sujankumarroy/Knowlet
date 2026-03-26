@@ -101,7 +101,7 @@ ${text}
             raw = response.text();
 
             // 🧠 Chat response (no parsing needed)
-            if (isQuestion) {
+            if (mode !== "quiz") {
                 return new Response(
                     JSON.stringify({
                         success: true,
