@@ -14,7 +14,7 @@ export default async (request) => {
 
     try {
         const body = await request.json();
-        const { text, difficulty = "medium" } = body;
+        const { text, mode, difficulty = "medium" } = body;
 
         if (!text) {
             return new Response(
@@ -40,15 +40,6 @@ export default async (request) => {
                 { status: 200, headers: corsHeaders() }
             );
         }
-
-        // ✅ Detect question vs notes
-        const isQuestion =
-            lowerText.endsWith("?") ||
-            lowerText.startsWith("what") ||
-            lowerText.startsWith("why") ||
-            lowerText.startsWith("how") ||
-            lowerText.startsWith("explain") ||
-            lowerText.startsWith("define");
 
         const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash" });
 
@@ -96,7 +87,9 @@ NOTES:
 ${text}
 `;
 
-        const prompt = isQuestion ? chatPrompt : quizPrompt;
+        const prompt = mode === "quiz"
+            ? quizPrompt
+            : chatPrompt
 
         // ✅ Retry logic
         let raw = "";
