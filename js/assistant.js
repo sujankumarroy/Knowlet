@@ -17,6 +17,12 @@ function addMessage(text, sender) {
     chatBox.scrollTop = chatBox.scrollHeight;
 }
 
+// CLEAR MESSAGE
+function clearAll() {
+    const chatBox = document.getElementById("chatBox");
+    chatBox.innerHTML = "";
+}
+
 /* LOADER */
 function addLoader() {
     const chatBox = document.getElementById("chatBox");
