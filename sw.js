@@ -1,4 +1,4 @@
-const APP_VERSION = '1.7.90';
+const APP_VERSION = '1.8.15';
 const CACHE_NAME = `knowlet-${APP_VERSION}`;
 const IGNORE_PARAMS_FOR = '/navigator';
 const STATIC_ASSETS = [
@@ -12,6 +12,7 @@ const STATIC_ASSETS = [
 
     '/index',
     '/favourite',
+    '/assistant',
     '/history',
     '/profile',
     '/login_signup',
@@ -21,6 +22,7 @@ const STATIC_ASSETS = [
 
     '/css/style.css',
     '/css/favourite.css',
+    '/css/assistant.css',
     '/css/history.css',
     '/css/profile.css',
     '/css/login_signup.css',
@@ -30,6 +32,7 @@ const STATIC_ASSETS = [
 
     '/js/script.js',
     '/js/favourite.js',
+    '/js/assistant.js',
     '/js/history.js',
     '/js/profile.js',
     '/js/login_signup.js',

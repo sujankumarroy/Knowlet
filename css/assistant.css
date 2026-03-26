@@ -94,8 +94,8 @@ button:hover {
     font-size: 14px;
 }
 
-.icon-btn:hover {
-    background: #334155;
+.icon-btn.active {
+    background: #445266;
 }
 
 label {

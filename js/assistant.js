@@ -3,7 +3,11 @@ let mode = "normal";
 
 const input = document.getElementById("inputText");
 
-const API_URL = "http://localhost:8888/.netlify/functions/gemini";
+const API_URL = "https://knowlet.in/.netlify/functions/gemini";
+
+document.getElementById("quiz-mode").addEventListener("click", (e) => activateMode(e.target, "quiz"));
+
+document.getElementById("clear-all").addEventListener("click", clearAll);
 
 /* ADD MESSAGE */
 function addMessage(text, sender) {
@@ -171,12 +175,18 @@ function startCountdown(seconds) {
     }, 1000);
 }
 
-function quizMode() {
-    mode = "quiz";
-    input.focus();
+/* TOOLS */
+function clearAll() {
+    const chatBox = document.getElementById("chatBox");
+    chatBox.innerHTML = "";
 }
 
-function normalMode() {
-    mode = "normal";
-    input.focus();
+function activateMode(btnQuiz, m) {
+    if (mode !== m) {
+        btnQuiz.classList.add("active");
+        mode = m;
+    } else {
+        btnQuiz.classList.remove("active");
+        mode = "normal";
+    }
 }
