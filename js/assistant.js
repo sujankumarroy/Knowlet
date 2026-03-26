@@ -1,4 +1,5 @@
 let cooldown = false;
+let mode = "normal";
 
 const API_URL = "https://knowlet.in/.netlify/functions/gemini";
 
@@ -55,7 +56,7 @@ async function sendRequest() {
             headers: {
                 "Content-Type": "application/json"
             },
-            body: JSON.stringify({ text })
+            body: JSON.stringify({ text, mode })
         });
 
         const data = await res.json();
@@ -166,4 +167,18 @@ function startCountdown(seconds) {
             cooldown = false;
         }
     }, 1000);
+}
+
+function startQuiz() {
+    addMessage("📝 Quiz mode activated!", "ai");
+    mode = "quiz";
+    const input = document.getElementById("inputText");
+    input.focus();
+}
+
+function askQuestion() {
+    addMessage("❓ Ask mode activated!", "ai");
+    mode = "ask";
+    const input = document.getElementById("inputText");
+    input.focus();
 }

@@ -76,6 +76,27 @@ button:hover {
     opacity: 0.9;
 }
 
+.toolbar {
+    display: flex;
+    gap: 8px;
+    padding: 6px 10px;
+    border-bottom: 1px solid #334155;
+}
+
+.icon-btn {
+    background: #0f172a;
+    border: 1px solid #334155;
+    color: white;
+    border-radius: 8px;
+    padding: 6px 10px;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.icon-btn:hover {
+    background: #334155;
+}
+
 label {
     display: block;
     margin: 4px 0;
