@@ -3,7 +3,7 @@ let mode = "normal";
 
 const input = document.getElementById("inputText");
 
-const API_URL = "http://localhost:8888/.netlify/functions/gemini";
+const API_URL = "https://knowlet.in/.netlify/functions/gemini";
 
 document.getElementById("quiz-mode").addEventListener("click", (e) => activateMode(e.target, "quiz"));
 
