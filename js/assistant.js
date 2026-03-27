@@ -12,10 +12,11 @@ document.getElementById("clear-all").addEventListener("click", clearAll);
 /* ADD MESSAGE */
 function addMessage(text, sender) {
     const chatBox = document.getElementById("chatBox");
+    const time = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
 
     const div = document.createElement("div");
     div.className = `message ${sender}`;
-    div.innerHTML = text;
+    div.innerHTML = `${text} <span class="time">${time}</span>`;
 
     chatBox.appendChild(div);
     chatBox.scrollTop = chatBox.scrollHeight;
