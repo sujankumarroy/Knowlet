@@ -5,9 +5,22 @@ const input = document.getElementById("inputText");
 
 const API_URL = "https://knowlet.in/.netlify/functions/gemini";
 
-document.getElementById("quiz-mode").addEventListener("click", (e) => activateMode(e.target, "quiz"));
-
 document.getElementById("clear-all").addEventListener("click", clearAll);
+
+document.querySelectorAll(".mode").forEach(btn => {
+    btn.addEventListener("click", () => {
+        const selectedMode = btn.dataset.mode;
+
+        document.querySelectorAll(".mode").forEach(b => b.classList.remove("active"));
+
+        if (mode === selectedMode) {
+            mode = "normal";
+        } else {
+            mode = selectedMode;
+            btn.classList.add("active");
+        }
+    });
+});
 
 /* ADD MESSAGE */
 function addMessage(text, sender) {
@@ -180,14 +193,4 @@ function startCountdown(seconds) {
 function clearAll() {
     const chatBox = document.getElementById("chatBox");
     chatBox.innerHTML = "";
-}
-
-function activateMode(btnQuiz, m) {
-    if (mode !== m) {
-        btnQuiz.classList.add("active");
-        mode = m;
-    } else {
-        btnQuiz.classList.remove("active");
-        mode = "normal";
-    }
 }
