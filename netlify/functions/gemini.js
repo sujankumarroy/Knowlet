@@ -43,28 +43,19 @@ export default async (request) => {
 
         const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash" });
 
-        // 🧠 Chat Prompt
-        const chatPrompt = `
-You are Knowlet, an AI learning assistant.
+        let prompt = "";
 
-Answer the user's question clearly and concisely.
-- Keep it simple and easy to understand
-- No unnecessary long explanations
-- No JSON, only plain text
-
-QUESTION:
-${text}
-`;
-
-        // 📘 Quiz Prompt
-        const quizPrompt = `
+        // Mode-specific prompt
+        switch (mode) {
+            case "quiz":
+                prompt = `
 You are a quiz generator for Knowlet.
 
 Create 5 ${difficulty}-level multiple-choice questions (MCQs) from the given student notes.
 
 STRICT RULES:
 - Output MUST be valid JSON
-- NO markdown (no \`\`\`)
+- NO markdown
 - NO explanations or extra text
 - Start with [ and end with ]
 - Exactly 4 options per question
@@ -79,17 +70,67 @@ FORMAT:
       "option text",
       "option text"
     ],
-    "answer": "option test"
+    "answer": "option text"
   }
 ]
 
 NOTES:
 ${text}
 `;
+                break;
 
-        const prompt = mode === "quiz"
-            ? quizPrompt
-            : chatPrompt
+            case "study":
+                prompt = `
+You are Knowlet, an AI learning assistant.
+
+Summarize the following text clearly and concisely for study purposes:
+- Keep it simple and easy to understand
+- Highlight key points
+- No unnecessary long explanations
+
+TEXT:
+${text}
+`;
+                break;
+
+            case "short":
+                prompt = `
+You are Knowlet, an AI learning assistant.
+
+Provide a very short and direct answer to the user's question. Max 1-2 sentences.
+
+QUESTION:
+${text}
+`;
+                break;
+
+            case "explain":
+                prompt = `
+You are Knowlet, an AI learning assistant.
+
+Explain the following topic in a detailed but simple manner:
+- Use examples if possible
+- Make it easy for a student to understand
+
+TOPIC:
+${text}
+`;
+                break;
+
+            default:
+                // normal chat
+                prompt = `
+You are Knowlet, an AI learning assistant.
+
+Answer the user's question clearly and concisely.
+- Keep it simple and easy to understand
+- No unnecessary long explanations
+- No JSON, only plain text
+
+QUESTION:
+${text}
+`;
+        }
 
         // ✅ Retry logic
         let raw = "";
