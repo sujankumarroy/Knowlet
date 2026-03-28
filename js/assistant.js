@@ -5,7 +5,11 @@ const input = document.getElementById("inputText");
 
 const API_URL = "https://knowlet.in/.netlify/functions/gemini";
 
-document.getElementById("clear-all").addEventListener("click", clearAll);
+document.getElementById("clear-all").addEventListener("click", () => {
+    clearAll();
+    mode = "normal";
+    document.querySelectorAll(".mode").forEach(b => b.classList.remove("active"));
+});
 
 document.querySelectorAll(".mode").forEach(btn => {
     btn.addEventListener("click", () => {
@@ -15,9 +19,11 @@ document.querySelectorAll(".mode").forEach(btn => {
 
         if (mode === selectedMode) {
             mode = "normal";
+            addMessage(`Mode: ${mode}`, "ai");
         } else {
             mode = selectedMode;
             btn.classList.add("active");
+            addMessage(`Mode: ${mode}`, "ai");
         }
     });
 });
