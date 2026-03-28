@@ -141,34 +141,24 @@ ${text}
             const response = await result.response;
             raw = response.text();
 
-            // 🧠 Chat response (no parsing needed)
-            if (mode !== "quiz") {
+            if (mode === "quiz") {
+                try {
+                    const cleaned = cleanJSON(raw);
+                    parsed = JSON.parse(cleaned);
+                    break;
+                } catch (err) {
+                    if (attempt === 2) {
+                        return new Response(
+                            JSON.stringify({ success: false, error: "Invalid AI response after retries", raw }),
+                            { status: 500, headers: corsHeaders() }
+                        );
+                    }
+                }
+            } else {
                 return new Response(
-                    JSON.stringify({
-                        success: true,
-                        type: "chat",
-                        message: raw.trim()
-                    }),
+                    JSON.stringify({ success: true, type: "chat", message: raw.trim() }),
                     { status: 200, headers: corsHeaders() }
                 );
-            }
-
-            // 📘 Quiz parsing
-            try {
-                const cleaned = cleanJSON(raw);
-                parsed = JSON.parse(cleaned);
-                break;
-            } catch (err) {
-                if (attempt === 2) {
-                    return new Response(
-                        JSON.stringify({
-                            success: false,
-                            error: "Invalid AI response after retries",
-                            raw
-                        }),
-                        { status: 500, headers: corsHeaders() }
-                    );
-                }
             }
         }
 
