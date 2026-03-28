@@ -1,4 +1,4 @@
-const APP_VERSION = '1.8.15';
+const APP_VERSION = '1.8.35';
 const CACHE_NAME = `knowlet-${APP_VERSION}`;
 const IGNORE_PARAMS_FOR = '/navigator';
 const STATIC_ASSETS = [

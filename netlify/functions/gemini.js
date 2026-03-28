@@ -3,13 +3,8 @@ import { GoogleGenerativeAI } from "@google/generative-ai";
 const genAI = new GoogleGenerativeAI(process.env.GOOGLE_AI_API_KEY);
 
 export default async (request) => {
-
-    // CORS
     if (request.method === "OPTIONS") {
-        return new Response(null, {
-            status: 204,
-            headers: corsHeaders()
-        });
+        return new Response(null, { status: 204, headers: corsHeaders() });
     }
 
     try {
@@ -25,7 +20,6 @@ export default async (request) => {
 
         const lowerText = text.toLowerCase();
 
-        // ✅ Identity (NO AI CALL)
         if (
             lowerText.includes("who are you") ||
             lowerText.includes("what are you") ||
@@ -43,28 +37,19 @@ export default async (request) => {
 
         const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash" });
 
-        // 🧠 Chat Prompt
-        const chatPrompt = `
-You are Knowlet, an AI learning assistant.
+        let prompt = "";
 
-Answer the user's question clearly and concisely.
-- Keep it simple and easy to understand
-- No unnecessary long explanations
-- No JSON, only plain text
-
-QUESTION:
-${text}
-`;
-
-        // 📘 Quiz Prompt
-        const quizPrompt = `
+        // Mode-specific prompt
+        switch (mode) {
+            case "quiz":
+                prompt = `
 You are a quiz generator for Knowlet.
 
 Create 5 ${difficulty}-level multiple-choice questions (MCQs) from the given student notes.
 
 STRICT RULES:
 - Output MUST be valid JSON
-- NO markdown (no \`\`\`)
+- NO markdown
 - NO explanations or extra text
 - Start with [ and end with ]
 - Exactly 4 options per question
@@ -79,19 +64,68 @@ FORMAT:
       "option text",
       "option text"
     ],
-    "answer": "option test"
+    "answer": "option text"
   }
 ]
 
 NOTES:
 ${text}
 `;
+                break;
 
-        const prompt = mode === "quiz"
-            ? quizPrompt
-            : chatPrompt
+            case "study":
+                prompt = `
+You are Knowlet, an AI learning assistant.
 
-        // ✅ Retry logic
+Summarize the following text clearly and concisely for study purposes:
+- Keep it simple and easy to understand
+- Highlight key points
+- No unnecessary long explanations
+
+TEXT:
+${text}
+`;
+                break;
+
+            case "short":
+                prompt = `
+You are Knowlet, an AI learning assistant.
+
+Provide a very short and direct answer to the user's question. Max 1-2 sentences.
+
+QUESTION:
+${text}
+`;
+                break;
+
+            case "explain":
+                prompt = `
+You are Knowlet, an AI learning assistant.
+
+Explain the following topic in a detailed but simple manner:
+- Use examples if possible
+- Make it easy for a student to understand
+
+TOPIC:
+${text}
+`;
+                break;
+
+            default:
+                // normal chat
+                prompt = `
+You are Knowlet, an AI learning assistant.
+
+Answer the user's question clearly and concisely.
+- Keep it simple and easy to understand
+- No unnecessary long explanations
+- No JSON, only plain text
+
+QUESTION:
+${text}
+`;
+        }
+
         let raw = "";
         let parsed = null;
 
@@ -100,57 +134,37 @@ ${text}
             const response = await result.response;
             raw = response.text();
 
-            // 🧠 Chat response (no parsing needed)
-            if (mode !== "quiz") {
+            if (mode === "quiz") {
+                try {
+                    const cleaned = cleanJSON(raw);
+                    parsed = JSON.parse(cleaned);
+                    break;
+                } catch (err) {
+                    if (attempt === 2) {
+                        return new Response(
+                            JSON.stringify({ success: false, error: "Invalid AI response after retries", raw }),
+                            { status: 500, headers: corsHeaders() }
+                        );
+                    }
+                }
+            } else {
                 return new Response(
-                    JSON.stringify({
-                        success: true,
-                        type: "chat",
-                        message: raw.trim()
-                    }),
+                    JSON.stringify({ success: true, type: "chat", message: raw.trim() }),
                     { status: 200, headers: corsHeaders() }
                 );
-            }
-
-            // 📘 Quiz parsing
-            try {
-                const cleaned = cleanJSON(raw);
-                parsed = JSON.parse(cleaned);
-                break;
-            } catch (err) {
-                if (attempt === 2) {
-                    return new Response(
-                        JSON.stringify({
-                            success: false,
-                            error: "Invalid AI response after retries",
-                            raw
-                        }),
-                        { status: 500, headers: corsHeaders() }
-                    );
-                }
             }
         }
 
         return new Response(
-            JSON.stringify({
-                success: true,
-                type: "quiz",
-                quiz: parsed
-            }),
+            JSON.stringify({ success: true, type: "quiz", quiz: parsed }),
             { status: 200, headers: corsHeaders() }
         );
 
     } catch (err) {
         const message = err.message || "";
 
-        // 🚨 Quota / rate limit error
-        if (
-            message.includes("429") ||
-            message.toLowerCase().includes("quota") ||
-            message.toLowerCase().includes("too many requests")
-        ) {
+        if (message.includes("429") || message.toLowerCase().includes("quota") || message.toLowerCase().includes("too many requests")) {
             const waitTime = extractRetryTime(message);
-
             return new Response(
                 JSON.stringify({
                     success: false,
@@ -162,27 +176,17 @@ ${text}
             );
         }
 
-        // ❌ Other errors
         return new Response(
-            JSON.stringify({
-                success: false,
-                errObj: err,
-                error: "Something went wrong. Please try again."
-            }),
+            JSON.stringify({ success: false, errObj: err, error: "Something went wrong. Please try again." }),
             { status: 500, headers: corsHeaders() }
         );
     }
 };
 
-// 🔧 Clean JSON
 function cleanJSON(raw) {
-    return raw
-        .replace(/```json/g, "")
-        .replace(/```/g, "")
-        .trim();
+    return raw.replace(/```json/g, "").replace(/```/g, "").trim();
 }
 
-// 🔧 CORS Headers
 function corsHeaders() {
     return {
         "Content-Type": "application/json",
@@ -194,5 +198,5 @@ function corsHeaders() {
 
 function extractRetryTime(errorMessage) {
     const match = errorMessage.match(/retryDelay":"(\d+)s"/);
-    return match ? parseInt(match[1]) : 20; // default 20s
+    return match ? parseInt(match[1]) : 20;
 }
