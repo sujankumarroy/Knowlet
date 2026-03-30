@@ -11,7 +11,7 @@ class Assistant {
 
     initEvents() {
         /* ENTER TO SEND */
-        this.input.addEventListener("keydown", function(e) {
+        this.input.addEventListener("keydown", (e) => {
             if (e.key === "Enter" && !e.shiftKey) {
                 e.preventDefault();
                 this.sendRequest();
@@ -23,6 +23,8 @@ class Assistant {
             this.mode = "normal";
             this.modes.forEach(b => b.classList.remove("active"));
         });
+
+        document.getElementById("btnSend").addEventListener("click", () => this.sendRequest());
 
         this.modes.forEach(btn => {
             btn.addEventListener("click", () => {
@@ -207,3 +209,8 @@ class Assistant {
         chatBox.innerHTML = "";
     }
 }
+
+document.addEventListener("DOMContentLoaded", async () => {
+    const assistant = new Assistant();
+    assistant.initEvents();
+});
