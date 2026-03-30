@@ -1,43 +1,49 @@
-        let cooldown = false;
-        let mode = "normal";
+class Assistant {
+    constructor() {
+        this.cooldown = false;
+        this.mode = "normal";
 
-        const input = document.getElementById("inputText");
+        this.input = document.getElementById("inputText");
+        this.modes = document.querySelectorAll(".mode");
 
-        const API_URL = "https://knowlet.in/.netlify/functions/gemini";
+        this.API_URL = "https://knowlet.in/.netlify/functions/gemini";
+    }
 
+    initEvents() {
         /* ENTER TO SEND */
-        document.getElementById("inputText").addEventListener("keydown", function(e) {
+        this.input.addEventListener("keydown", function(e) {
             if (e.key === "Enter" && !e.shiftKey) {
                 e.preventDefault();
-                sendRequest();
+                this.sendRequest();
             }
         });
 
         document.getElementById("clear-all").addEventListener("click", () => {
             clearAll();
-            mode = "normal";
-            document.querySelectorAll(".mode").forEach(b => b.classList.remove("active"));
+            this.mode = "normal";
+            this.modes.forEach(b => b.classList.remove("active"));
         });
 
-        document.querySelectorAll(".mode").forEach(btn => {
+        this.modes.forEach(btn => {
             btn.addEventListener("click", () => {
                 const selectedMode = btn.dataset.mode;
 
-                document.querySelectorAll(".mode").forEach(b => b.classList.remove("active"));
+                this.modes.forEach(b => b.classList.remove("active"));
 
-                if (mode === selectedMode) {
-                    mode = "normal";
-                    addMessage(`Mode: ${mode}`, "ai");
+                if (this.mode === selectedMode) {
+                    this.mode = "normal";
+                    this.addMessage(`Mode: ${this.mode}`, "ai");
                 } else {
-                    mode = selectedMode;
+                    this.mode = selectedMode;
                     btn.classList.add("active");
-                    addMessage(`Mode: ${mode}`, "ai");
+                    this.addMessage(`Mode: ${this.mode}`, "ai");
                 }
             });
         });
+    }
 
     /* ADD MESSAGE */
-    function addMessage(text, sender) {
+    addMessage(text, sender) {
         const chatBox = document.getElementById("chatBox");
         const time = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
 
@@ -50,7 +56,7 @@
     }
 
     /* LOADER */
-    function addLoader() {
+    addLoader() {
         const chatBox = document.getElementById("chatBox");
 
         const div = document.createElement("div");
@@ -62,70 +68,69 @@
         chatBox.scrollTop = chatBox.scrollHeight;
     }
 
-    function removeLoader() {
+    removeLoader() {
         const loader = document.getElementById("loader");
         if (loader) loader.remove();
     }
 
     /* SEND REQUEST */
-    async function sendRequest() {
-        if (cooldown) {
-            addMessage("⏳ Please wait before sending another message.", "ai");
+    async sendRequest() {
+        if (this.cooldown) {
+            this.addMessage("⏳ Please wait before sending another message.", "ai");
             return;
         }
 
-        const input = document.getElementById("inputText");
-        const text = input.value.trim();
+        const text = this.input.value.trim();
 
         if (!text) return;
 
-        addMessage(text, "user");
-        input.value = "";
+        this.addMessage(text, "user");
+        this.input.value = "";
 
-        addLoader();
+        this.addLoader();
 
         try {
-            const res = await fetch(API_URL, {
+            const res = await fetch(this.API_URL, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"
                 },
-                body: JSON.stringify({ text, mode })
+                body: JSON.stringify({ text, mode: this.mode })
             });
 
             const data = await res.json();
-            removeLoader();
+            this.removeLoader();
 
             if (!data.success) {
                 // 🚨 Rate limit handling
                 if (data.type === "rate_limit") {
-                    addMessage(data.message, "ai");
-                    startCountdown(data.retryAfter);
+                    this.addMessage(data.message, "ai");
+                    this.startCountdown(data.retryAfter);
                     return;
                 }
 
-                addMessage("⚠️ " + (data.error || "Something went wrong"), "ai");
+                this.addMessage("⚠️ " + (data.error || "Something went wrong"), "ai");
                 return;
             }
 
             /* CHAT */
             if (data.type === "chat" || data.type === "identity") {
-                addMessage(data.message, "ai");
+                this.addMessage(data.message, "ai");
             }
 
             /* QUIZ */
             if (data.type === "quiz") {
-                renderQuiz(data.quiz);
+                this.renderQuiz(data.quiz);
             }
 
         } catch (err) {
-            removeLoader();
-            addMessage("Request failed.", "ai");
+            this.removeLoader();
+            this.addMessage("Request failed.", "ai");
         }
     }
 
     /* QUIZ RENDER */
-    function renderQuiz(quiz) {
+    renderQuiz(quiz) {
         quiz.forEach((q, index) => {
             const chatBox = document.getElementById("chatBox");
 
@@ -161,7 +166,7 @@
     }
 
     /* CHECK ANSWER */
-    function checkAnswer(input, correct) {
+    checkAnswer(input, correct) {
         const parent = input.closest(".message");
         const result = parent.querySelector(".result");
 
@@ -175,9 +180,9 @@
     }
 
     /* COUNTDOWN */
-    function startCountdown(seconds) {
+    startCountdown(seconds) {
         const button = document.getElementById("btnSend");
-        cooldown = true;
+        this.cooldown = true;
         button.disabled = true;
 
         let timeLeft = seconds;
@@ -191,13 +196,14 @@
                 clearInterval(interval);
                 button.innerText = "➤";
                 button.disabled = false;
-                cooldown = false;
+                this.cooldown = false;
             }
         }, 1000);
     }
 
     /* TOOLS */
-    function clearAll() {
+    clearAll() {
         const chatBox = document.getElementById("chatBox");
         chatBox.innerHTML = "";
     }
+}
