@@ -5,6 +5,14 @@ const input = document.getElementById("inputText");
 
 const API_URL = "https://knowlet.in/.netlify/functions/gemini";
 
+/* ENTER TO SEND */
+document.getElementById("inputText").addEventListener("keydown", function(e) {
+    if (e.key === "Enter" && !e.shiftKey) {
+        e.preventDefault();
+        sendRequest();
+    }
+});
+
 document.getElementById("clear-all").addEventListener("click", () => {
     clearAll();
     mode = "normal";
@@ -116,14 +124,6 @@ async function sendRequest() {
     }
 }
 
-/* ENTER TO SEND */
-document.getElementById("inputText").addEventListener("keydown", function(e) {
-    if (e.key === "Enter" && !e.shiftKey) {
-        e.preventDefault();
-        sendRequest();
-    }
-});
-
 /* QUIZ RENDER */
 function renderQuiz(quiz) {
     quiz.forEach((q, index) => {
@@ -174,6 +174,7 @@ function checkAnswer(input, correct) {
     }
 }
 
+/* COUNTDOWN */
 function startCountdown(seconds) {
     const button = document.getElementById("btnSend");
     cooldown = true;
