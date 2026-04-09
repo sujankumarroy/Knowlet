@@ -1,6 +1,9 @@
 import { createClient } from '@supabase/supabase-js';
+import bcrypt from "bcrypt";
+import jwt from "jsonwebtoken";
 
 const supabaseClient = createClient(process.env.SUPABASE_DATABASE_URL, process.env.SUPABASE_ANON_KEY);
+const JWT_SECRET = process.env.JWT_SECRET;
 
 export default async (request) => {
     
@@ -15,56 +18,63 @@ export default async (request) => {
         });
     }
     
-    const body = await request.json();
-    const user = body;
-    
     try {
+        const { name, email, password } = await request.json();
+        const id = getId(name);
+        const hash = await bcrypt.hash(password, 10);
+
+        if (!id || !name || !password || !hash) {
+            return new Response(
+                JSON.stringify({ success: false, error: { message: "Invalid name of Empty password"}}),
+                { status: 500, headers: defaultHeader() }
+            )
+        }
+
+        const user = { id, name, email, password: hash }
+        const token = jwt.sign({ id, name, email }, JWT_SECRET);
+
         const { error } = await supabaseClient
-                .from("users")
-                .insert(user);
+            .from("users")
+            .insert(user);
 
         if (error) {
             return new Response(
-                JSON.stringify({
-                    success: false,
-                    error: error.message
-                }),
+                JSON.stringify({ success: false, error: error.message }),
                 {
                     status: 500,
                     headers: {
-                        'Content-Type': 'application/json',
-                        'Access-Control-Allow-Origin': '*'
+                        ...defaultHeader(),
+                        'Set-Cookie': `token=${token}; HttpOnly; Path=/; SameSite=Strict`
                     }
                 }
             );
         }
         
         return new Response(
-            JSON.stringify({
-                success: true
-            }),
-            {
-                status: 200,
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Access-Control-Allow-Origin': '*'
-                }
-            }
+            JSON.stringify({ success: true }),
+            { status: 200, headers: defaultHeader() }
         );
         
     } catch (err) {
         return new Response(
-            JSON.stringify({
-                success: false,
-                error: err.message
-            }),
-            {
-                status: 500,
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Access-Control-Allow-Origin': '*'
-                }
-            }
+            JSON.stringify({ success: false, error: err.message }),
+            { status: 500, headers: defaultHeader() }
         );
     }
 };
+
+function getId(name) {
+    const firstName = name.split(' ')[0] || "";
+    if (!firstName) return null;
+    const specialChar = "@";
+    const randomNumber = Math.floor(Math.random() * 9000 + 1000);
+    const id = firstName + specialChar + randomNumber;
+    return id;
+}
+
+function defaultHeader() {
+    return {
+        'Content-Type': 'application/json',
+        'Access-Control-Allow-Origin': '*'
+    }
+}
