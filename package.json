@@ -8,7 +8,8 @@
     "license": "",
     "dependencies": {
         "@google/generative-ai": "^0.24.1",
-        "@supabase/supabase-js": "^2.0.0"
+        "@supabase/supabase-js": "^2.0.0",
+        "bcrypt": "^6.0.0"
     },
     "devDependencies": {
         "dotenv": "^17.2.3"
