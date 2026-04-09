@@ -140,9 +140,10 @@ async function signup(name, email, password) {
         // new
         loader.style.display = "flex";
         const res = await fetch(
-            'https://knowlet.in/.netlify/functions/set-data',
+            'http://localhost:8888/.netlify/functions/set-data',
             {
                 method: 'POST',
+                credentials: "include",
                 headers: {'Content-Type': 'application/json'},
                 body: JSON.stringify(user)
             }
@@ -161,7 +162,7 @@ async function signup(name, email, password) {
 
         localStorage.setItem("knowletUser", JSON.stringify(user));
         alert("Successfully Signed Up\n" + "Note your user ID: " + userId);
-        redirect();
+        // redirect();
         
     } catch(e) {
         console.log(e);

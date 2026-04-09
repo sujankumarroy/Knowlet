@@ -11,9 +11,10 @@ export default async (request) => {
         return new Response(null, {
             status: 204,
             headers: {
-                'Access-Control-Allow-Origin': '*',
+                'Access-Control-Allow-Origin': 'http://127.0.0.1:5500',
+                "Access-Control-Allow-Credentials": "true",
                 'Access-Control-Allow-Headers': 'Content-Type',
-                'Access-Control-Allow-Methods': 'GET, POST, OPTIONS'
+                'Access-Control-Allow-Methods': 'POST, OPTIONS'
             }
         });
     }
@@ -39,25 +40,25 @@ export default async (request) => {
 
         if (error) {
             return new Response(
-                JSON.stringify({ success: false, error: error.message }),
-                {
-                    status: 500,
-                    headers: {
-                        ...defaultHeader(),
-                        'Set-Cookie': `token=${token}; HttpOnly; Path=/; SameSite=Strict`
-                    }
-                }
+                JSON.stringify({ success: false, error: error }),
+                { status: 500, headers: defaultHeader() }
             );
         }
         
         return new Response(
             JSON.stringify({ success: true }),
-            { status: 200, headers: defaultHeader() }
+            {
+                status: 200,
+                headers: {
+                    ...defaultHeader(),
+                    'Set-Cookie': `token=${token}; HttpOnly; Path=/`
+                }
+            }
         );
         
     } catch (err) {
         return new Response(
-            JSON.stringify({ success: false, error: err.message }),
+            JSON.stringify({ success: false, error: err }),
             { status: 500, headers: defaultHeader() }
         );
     }
@@ -75,6 +76,7 @@ function getId(name) {
 function defaultHeader() {
     return {
         'Content-Type': 'application/json',
-        'Access-Control-Allow-Origin': '*'
+        'Access-Control-Allow-Origin': 'http://127.0.0.1:5500',
+        "Access-Control-Allow-Credentials": "true"
     }
 }
