@@ -6,9 +6,28 @@ class PWAHandler {
         this.init();
     }
 
-    init() {
+    async init() {
         if ('serviceWorker' in navigator) {
-            navigator.serviceWorker.register('/sw.js');
+            const registration = await navigator.serviceWorker.register('/sw.js');
+            const permission = await Notification.requestPermission();
+            if (permission === 'granted') {
+                const existing = await registration.pushManager.getSubscription();
+                if (existing) {
+                    console.log("Already subscribed");
+                    return;
+                }
+                const subscription = await registration.pushManager.subscribe({
+                    userVisibleOnly: true,
+                    applicationServerKey: this.urlBase64ToUint8Array("BPIVLOVmpkKigNRdGMvLHkb-N_0sZWHspIEN4XzafxESg7M5sO9KAgto8OdCUqU3Jl-F-Cq2TKdAibbCK64U1cg")
+                });
+                await fetch("https://knowlet.in/.netlify/functions/save-subscription", {
+                    method: "POST",
+                    body: JSON.stringify(subscription),
+                    headers: {
+                        "Content-Type": "application/json"
+                    }
+                });
+            }
         }
 
         window.addEventListener("beforeinstallprompt", (e) => {
@@ -29,6 +48,15 @@ class PWAHandler {
         const { outcome } = await this.deferredPrompt.userChoice;
         console.log(`User response to install: ${outcome}`);
         this.deferredPrompt = null;
+    }
+
+    urlBase64ToUint8Array(base64String) {
+        const padding = '='.repeat((4 - base64String.length % 4) % 4);
+        const base64 = (base64String + padding)
+            .replace(/-/g, '+')
+            .replace(/_/g, '/');
+        const rawData = atob(base64);
+        return new Uint8Array([...rawData].map(char => char.charCodeAt(0)));
     }
 }
 
