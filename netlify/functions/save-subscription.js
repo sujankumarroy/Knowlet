@@ -1,6 +1,6 @@
 import { createClient } from '@supabase/supabase-js';
 
-const supabase = createClient(
+const supabaseClient = createClient(
     process.env.SUPABASE_DATABASE_URL,
     process.env.SUPABASE_ANON_KEY
 );
@@ -26,7 +26,7 @@ export default async (request) => {
 
         const id = subscription.endpoint; // unique id
 
-        const { error } = await supabase
+        const { error } = await supabaseClient
             .from("subscriptions")
             .upsert({
                 id,

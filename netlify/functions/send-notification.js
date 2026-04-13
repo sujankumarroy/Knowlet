@@ -1,7 +1,7 @@
 import webpush from 'web-push';
 import { createClient } from '@supabase/supabase-js';
 
-const supabase = createClient(
+const supabaseClient = createClient(
     process.env.SUPABASE_DATABASE_URL,
     process.env.SUPABASE_ANON_KEY
 );
@@ -14,7 +14,7 @@ webpush.setVapidDetails(
 
 export default async () => {
     try {
-        const { data, error } = await supabase
+        const { data, error } = await supabaseClient
             .from("subscriptions")
             .select("subscription");
 
@@ -32,6 +32,14 @@ export default async () => {
                 await webpush.sendNotification(row.subscription, payload);
             } catch (err) {
                 console.error("Push failed:", err);
+
+                // 🔥 REMOVE INVALID SUBSCRIPTION
+                if (err.statusCode === 410 || err.statusCode === 404) {
+                    await supabaseClient
+                        .from("subscriptions")
+                        .delete()
+                        .eq("id", row.subscription.endpoint);
+                }
             }
         }
 
