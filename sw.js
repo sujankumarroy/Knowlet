@@ -117,11 +117,11 @@ self.addEventListener('fetch', event => {
 });
 
 self.addEventListener('push', event => {
-    const data = event.data.json();
+    const { title, body, iconUrl} = event.data.json();
 
-    self.registration.showNotification(data.title, {
-        body: data.body,
-        icon: '/assets/icons/android-chrome-192x192.png'
+    self.registration.showNotification(title || 'New Notification', {
+        body: body || 'Visit you notes and materials',
+        icon: iconUrl || '/assets/icons/knowlet/android-chrome-192x192.png'
     });
 });
 

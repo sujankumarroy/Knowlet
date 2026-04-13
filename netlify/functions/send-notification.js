@@ -22,6 +22,8 @@ export default async (request) => {
     }
 
     try {
+        const { title, body, iconUrl } = await request.json();
+
         const { data, error } = await supabaseClient
             .from("subscriptions")
             .select("subscription");
@@ -31,8 +33,9 @@ export default async (request) => {
         }
 
         const payload = JSON.stringify({
-            title: "Test Notification",
-            body: "Check latest notes now 👀"
+            title: title || "Test Notification",
+            body: body || "Check latest notes now 👀",
+            iconUrl: iconUrl || "/assets/icons/knowlet/android-chrome-192x192.png"
         });
 
         for (let row of data) {
