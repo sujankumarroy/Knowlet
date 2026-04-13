@@ -22,7 +22,7 @@ export default async (request) => {
     }
 
     try {
-        const { title, body, iconUrl } = await request.json();
+        const { title, body, icon, badge, image, tag, url } = await request.json();
 
         const { data, error } = await supabaseClient
             .from("subscriptions")
@@ -32,11 +32,7 @@ export default async (request) => {
             return new Response(JSON.stringify({ success: false, error }), { status: 500 });
         }
 
-        const payload = JSON.stringify({
-            title: title || "Test Notification",
-            body: body || "Check latest notes now 👀",
-            iconUrl: iconUrl || "/assets/icons/knowlet/android-chrome-192x192.png"
-        });
+        const payload = JSON.stringify({ title, body, icon, badge, image, tag, url });
 
         for (let row of data) {
             try {

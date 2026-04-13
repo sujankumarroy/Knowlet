@@ -1,4 +1,4 @@
-const APP_VERSION = '1.9.15';
+const APP_VERSION = '1.9.20';
 const CACHE_NAME = `knowlet-${APP_VERSION}`;
 const IGNORE_PARAMS_FOR = '/navigator';
 const STATIC_ASSETS = [
@@ -117,18 +117,33 @@ self.addEventListener('fetch', event => {
 });
 
 self.addEventListener('push', event => {
-    const { title, body, iconUrl} = event.data.json();
-
-    self.registration.showNotification(title || 'New Notification', {
-        body: body || 'Visit you notes and materials',
-        icon: iconUrl || '/assets/icons/knowlet/android-chrome-192x192.png'
-    });
+    const data = event.data?.json() || {};
+    const title = data.title || 'Your Notes Are Ready';
+    event.waitUntil(
+        self.registration.showNotification(title, {
+            body: data.body || 'Jump back in and keep learning with Knowlet.',
+            icon: data.icon || '/assets/icons/knowlet/android-chrome-192x192.png',
+            badge: data.badge || '/assets/icons/knowlet/favicon-32x32.png',
+            image: data.image,
+            tag: data.tag,
+            data: {
+                url: data.url || '/'
+            }
+        })
+    );
 });
 
 self.addEventListener('notificationclick', event => {
     event.notification.close();
-
+    const url = new URL(event.notification.data?.url || '/', self.location.origin).href;
     event.waitUntil(
-        clients.openWindow('/')
+        clients.matchAll({ type: "window", includeUncontrolled: true }).then(clientList => {
+            for (const client of clientList) {
+                if (client.url === url && 'focus' in client) {
+                    return client.focus();
+                }
+            }
+            return clients.openWindow(url);
+        })
     );
 });
