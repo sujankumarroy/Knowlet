@@ -20,7 +20,7 @@ class PWAHandler {
                     userVisibleOnly: true,
                     applicationServerKey: this.urlBase64ToUint8Array("BPIVLOVmpkKigNRdGMvLHkb-N_0sZWHspIEN4XzafxESg7M5sO9KAgto8OdCUqU3Jl-F-Cq2TKdAibbCK64U1cg")
                 });
-                await fetch("http://localhost:888/.netlify/functions/save-subscription", {
+                await fetch("https://knowlet.in/.netlify/functions/save-subscription", {
                     method: "POST",
                     body: JSON.stringify(subscription),
                     headers: {
