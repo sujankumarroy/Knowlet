@@ -20,6 +20,7 @@ export default async (request) => {
     }
     
     try {
+        const cookies = request.headers.get('cookie');
         const { name, email, password } = await request.json();
         const id = getId(name);
         const hash = await bcrypt.hash(password, 10);
@@ -46,12 +47,13 @@ export default async (request) => {
         }
         
         return new Response(
-            JSON.stringify({ success: true }),
+            JSON.stringify({ success: true, cookies }),
             {
                 status: 200,
                 headers: {
                     ...defaultHeader(),
-                    'Set-Cookie': `token=${token}; HttpOnly; Path=/`
+                    "Access-Control-Allow-Credentials": "true",
+                    'Set-Cookie': `token=${token}; Max-Age=3600; HttpOnly; SameSite=Lax; Path=/*`
                 }
             }
         );

@@ -159,6 +159,7 @@ async function signup(name, email, password) {
         if (!result.success) {
             throw new Error(result.error || "Unknown error occurred");
         }
+        console.log(result)
 
         localStorage.setItem("knowletUser", JSON.stringify(user));
         alert("Successfully Signed Up\n" + "Note your user ID: " + userId);
