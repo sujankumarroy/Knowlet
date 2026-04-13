@@ -12,7 +12,15 @@ webpush.setVapidDetails(
     process.env.VAPID_PRIVATE_KEY
 );
 
-export default async () => {
+export default async (request) => {
+
+    if (request.method === 'OPTIONS') {
+        return new Response(null, {
+            status: 204,
+            headers: defaultHeader()
+        });
+    }
+
     try {
         const { data, error } = await supabaseClient
             .from("subscriptions")
@@ -49,3 +57,12 @@ export default async () => {
         return new Response(JSON.stringify({ success: false, error: err.message }), { status: 500 });
     }
 };
+
+function defaultHeader() {
+    return {
+        'Content-Type': 'application/json',
+        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Headers': 'Content-Type',
+        'Access-Control-Allow-Methods': 'POST, OPTIONS'
+    };
+}
