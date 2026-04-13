@@ -19,7 +19,7 @@ class Assistant {
         });
 
         document.getElementById("clear-all").addEventListener("click", () => {
-            clearAll();
+            this.clearAll();
             this.mode = "normal";
             this.modes.forEach(b => b.classList.remove("active"));
         });
@@ -35,10 +35,12 @@ class Assistant {
                 if (this.mode === selectedMode) {
                     this.mode = "normal";
                     this.addMessage(`Mode: ${this.mode}`, "ai");
+                    this.input.focus();
                 } else {
                     this.mode = selectedMode;
                     btn.classList.add("active");
                     this.addMessage(`Mode: ${this.mode}`, "ai");
+                    this.input.focus();
                 }
             });
         });
