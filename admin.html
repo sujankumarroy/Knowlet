@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Knowlet Admin - Notifications</title>
+    <link rel="stylesheet" href="css/admin.css">
+</head>
+<body>
+
+    <!-- Login -->
+    <div id="login">
+        <div class="card">
+            <h2>Admin Login</h2>
+            <input type="password" id="password" placeholder="Enter password">
+            <button onclick="checkPassword()">Enter</button>
+        </div>
+    </div>
+
+    <!-- Dashboard -->
+    <div id="dashboard" class="hidden">
+
+        <h1>📢 Notification Dashboard</h1>
+
+        <div class="grid">
+            <div class="card">
+                <h2>Create Notification</h2>
+
+                <input id="title" placeholder="Title">
+                <textarea id="body" placeholder="Message"></textarea>
+                <input id="image" placeholder="Image URL">
+                <input id="url" placeholder="Click URL">
+
+                <div class="buttons">
+                    <button onclick="preview()">Preview</button>
+                    <button onclick="saveDraft()">Save Draft</button>
+                    <button onclick="sendNow()">Send</button>
+                </div>
+            </div>
+
+            <div class="card">
+                <h2>Preview</h2>
+                <div id="previewBox"></div>
+            </div>
+        </div>
+
+        <div class="grid">
+            <div class="card">
+                <h2>🗂 Drafts</h2>
+                <ul id="drafts"></ul>
+            </div>
+
+            <div class="card">
+                <h2>📜 History</h2>
+                <ul id="history"></ul>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>📊 Stats</h2>
+            <p>Total Sent: <span id="sentCount">0</span></p>
+            <p>Total Clicks: <span id="clickCount">0</span></p>
+        </div>
+
+        <div class="card">
+            <h2>⏰ Schedule</h2>
+            <input type="datetime-local" id="scheduleTime">
+            <button onclick="schedule()">Schedule</button>
+        </div>
+
+    </div>
+
+    <script src="js/admin.js"></script>
+</body>
+</html>
