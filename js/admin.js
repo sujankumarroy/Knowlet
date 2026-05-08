@@ -29,13 +29,13 @@ function initEventListener() {
 
 async function sendNow(to) {
   const payload = {
-    title: document.getElementById("title").value,
-    body: document.getElementById("body").value,
+    title: document.getElementById("title").value || defaultPreview.title,
+    body: document.getElementById("body").value || defaultPreview.body,
     // icon: "/assets/icons/knowlet/android-chrome-192x192.png",
     // badge: "/assets/icons/owlet/favicon-32x32.png",
-    image: document.getElementById("image").value,
+    image: document.getElementById("image").value || defaultPreview.image,
     // tag: "profile",
-    url: document.getElementById("url").value,
+    url: document.getElementById("url").value || defaultPreview.url,
     ADMIN_PASSWORD,
   };
 
