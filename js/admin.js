@@ -9,6 +9,49 @@ function initEventListener() {
   });
 }
 
+async function sendNow(to) {
+  const payload = {
+    title: document.getElementById("title").value,
+    body: document.getElementById("body").value,
+    // icon: "/assets/icons/knowlet/android-chrome-192x192.png",
+    // badge: "/assets/icons/owlet/favicon-32x32.png",
+    image: document.getElementById("image").value,
+    // tag: "profile",
+    url: document.getElementById("url").value,
+    ADMIN_PASSWORD,
+  };
+
+  const url =
+    to === "sujan"
+      ? "https://knowlet.in/.netlify/functions/send-notification-copy"
+      : "https://knowlet.in/.netlify/functions/send-notification";
+
+  const res = await fetch(url, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(payload),
+  });
+
+  if (!res.ok) {
+    console.error(`failed to fetch, status code: ${res.status}`);
+    alert("failed to send");
+    return;
+  }
+
+  let history = JSON.parse(localStorage.getItem("history") || "[]");
+  history.push(payload);
+
+  localStorage.setItem("history", JSON.stringify(history));
+
+  let sent = Number(localStorage.getItem("sent") || 0);
+  localStorage.setItem("sent", sent + 1);
+
+  loadHistory();
+  loadStats();
+
+  alert("Notification Sent!");
+}
+
 function checkPassword() {
   ADMIN_PASSWORD = document.getElementById("password").value + "";
   document.getElementById("login").style.display = "none";
@@ -65,49 +108,6 @@ function loadDrafts() {
   document.getElementById("drafts").innerHTML = drafts
     .map((d) => `<li onclick='loadInput(${JSON.stringify(d)})'>${d.title}</li>`)
     .join("");
-}
-
-async function sendNow(to) {
-  const payload = {
-    title: document.getElementById("title").value,
-    body: document.getElementById("body").value,
-    // icon: "/assets/icons/knowlet/android-chrome-192x192.png",
-    // badge: "/assets/icons/owlet/favicon-32x32.png",
-    image: document.getElementById("image").value,
-    // tag: "profile",
-    url: document.getElementById("url").value,
-    ADMIN_PASSWORD,
-  };
-
-  const url =
-    to === "sujan"
-      ? "https://knowlet.in/.netlify/functions/send-notification-copy"
-      : "https://knowlet.in/.netlify/functions/send-notification";
-
-  const res = await fetch(url, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(payload),
-  });
-
-  if (!res.ok) {
-    console.error(`failed to fetch, status code: ${res.status}`);
-    alert("failed to send");
-    return;
-  }
-
-  let history = JSON.parse(localStorage.getItem("history") || "[]");
-  history.push(payload);
-
-  localStorage.setItem("history", JSON.stringify(history));
-
-  let sent = Number(localStorage.getItem("sent") || 0);
-  localStorage.setItem("sent", sent + 1);
-
-  loadHistory();
-  loadStats();
-
-  alert("Notification Sent!");
 }
 
 function loadHistory() {
