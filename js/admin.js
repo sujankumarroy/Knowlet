@@ -56,8 +56,9 @@ async function sendNow(to) {
     return;
   }
 
+  delete payload.ADMIN_PASSWORD;
   let history = JSON.parse(localStorage.getItem("history") || "[]");
-  history.push(payload);
+  history.push({ id: crypto.randomUUID(), ...payload });
 
   localStorage.setItem("history", JSON.stringify(history));
 
@@ -100,6 +101,7 @@ function updatePreview(item) {
 
 function saveDraft() {
   const draft = {
+    id: crypto.randomUUID(),
     title: document.getElementById("title").value,
     body: document.getElementById("body").value,
     image: document.getElementById("image").value,
@@ -126,7 +128,7 @@ function loadDrafts() {
   document.getElementById("drafts").innerHTML = drafts
     .map(
       (d) =>
-        `<li onclick='loadInput(${JSON.stringify(d)})'>${d.title}<span id='delete'>${deleteIcon}</span></li>`,
+        `<li onclick='loadInput(${JSON.stringify(d)})'>${d.title}<span id='delete' onclick='trash("${d.id}", "drafts")'>${deleteIcon}</span></li>`,
     )
     .join("");
 }
@@ -159,6 +161,16 @@ function schedule() {
     setTimeout(sendNow, delay);
     alert("Scheduled!");
   }
+}
+
+function trash(id, from) {
+  const data = JSON.parse(localStorage.getItem(from) || "[]");
+  const index = data.findIndex((i) => i.id === id);
+  data.splice(index, 1);
+  localStorage.setItem(from, JSON.stringify(data));
+  if (from === "drafts") loadDrafts();
+  else if (from === "history") loadHistory();
+  return data;
 }
 
 loadDrafts();
