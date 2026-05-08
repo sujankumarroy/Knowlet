@@ -1,7 +1,7 @@
 let ADMIN_PASSWORD = "";
 const inputIds = ["title", "body", "image", "url"];
 const defaultPreview = {
-  title: "🚀 Boost Your Exam Preparation",
+  title: "⚡ Stop Scrolling. Start Revising.",
   body: "Important topics, quick notes & exam-focused questions ready for you.",
   image:
     "https://res.cloudinary.com/db975putk/image/upload/q_auto/f_auto/v1778231354/ChatGPT_Image_May_8_2026_02_16_27_PM_y2cunt.png",
@@ -72,7 +72,7 @@ async function sendNow(to) {
 
   delete payload.ADMIN_PASSWORD;
   let history = JSON.parse(localStorage.getItem("history") || "[]");
-  history.push({ id: crypto.randomUUID(), ...payload });
+  history.push({ id: crypto.randomUUID(), to: to ? to : "public", ...payload });
 
   localStorage.setItem("history", JSON.stringify(history));
 
@@ -148,7 +148,8 @@ function loadHistory() {
   document.getElementById("history").innerHTML =
     history
       .map(
-        (h) => `<li onclick='loadInput(${JSON.stringify(h)})'>${h.title}</li>`,
+        (h) =>
+          `<li onclick='loadInput(${JSON.stringify(h)})'>${h.title}<span id='visible-to'>${h.to}</span></li>`,
       )
       .join("") || "<p class='empty-message'>Empty notificaiton history</p>";
 }
