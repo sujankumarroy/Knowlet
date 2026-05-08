@@ -78,20 +78,28 @@ function checkPassword() {
 }
 
 function updatePreview(item) {
+  const defaultPreview = {
+    title: "🚀 Boost Your Exam Preparation",
+    body: "Important topics, quick notes & exam-focused questions ready for you.",
+    image:
+      "https://res.cloudinary.com/db975putk/image/upload/q_auto/f_auto/v1778231354/ChatGPT_Image_May_8_2026_02_16_27_PM_y2cunt.png",
+    url: "https://knowlet.in",
+  };
+
   if (item === "image") {
     document.getElementById("preview" + "-" + item).src =
-      document.getElementById(item).value;
+      document.getElementById(item).value || defaultPreview[item];
   } else if (item === "url") {
     document
       .getElementById("previewBox")
       .addEventListener("click", redirectPreview);
   } else if (item) {
     document.getElementById("preview" + "-" + item).textContent =
-      document.getElementById(item).value;
+      document.getElementById(item).value || defaultPreview[item];
   }
 
   function redirectPreview() {
-    const url = document.getElementById("url").value;
+    const url = document.getElementById("url").value || defaultPreview[item];
 
     if (url) {
       window.location.href = url;
