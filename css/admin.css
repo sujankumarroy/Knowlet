@@ -2,8 +2,12 @@ body {
   font-family: Arial, sans-serif;
   background: #f3f4f6;
   margin: 0;
-  padding: 20px;
   box-sizing: border-box;
+}
+
+#dashboard,
+#login {
+  padding: 20px;
 }
 
 * {
@@ -12,6 +16,17 @@ body {
 
 h1 {
   margin-bottom: 20px;
+}
+
+#login {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+#login form {
+  text-align: center;
 }
 
 .hidden {
@@ -111,7 +126,8 @@ ul li span:hover {
 
 /* Tablet */
 @media (max-width: 768px) {
-  body {
+  #dashboard,
+  #login {
     padding: 15px;
   }
 

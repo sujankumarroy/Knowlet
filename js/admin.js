@@ -20,6 +20,13 @@ const deleteIcon = `<svg
 </svg>`;
 
 function initEventListener() {
+  document.getElementById("loginForm").addEventListener("submit", (e) => {
+    e.preventDefault();
+    ADMIN_PASSWORD = document.getElementById("password").value + "";
+    document.getElementById("login").style.display = "none";
+    document.getElementById("dashboard").classList.remove("hidden");
+  });
+
   inputIds.forEach((inputId) => {
     document
       .getElementById(inputId)
@@ -69,12 +76,6 @@ async function sendNow(to) {
   loadStats();
 
   alert("Notification Sent!");
-}
-
-function checkPassword() {
-  ADMIN_PASSWORD = document.getElementById("password").value + "";
-  document.getElementById("login").style.display = "none";
-  document.getElementById("dashboard").classList.remove("hidden");
 }
 
 function updatePreview(item) {
@@ -185,6 +186,7 @@ function trash(id, from) {
   return data;
 }
 
+document.getElementById("password").focus();
 loadDrafts();
 loadHistory();
 loadStats();
