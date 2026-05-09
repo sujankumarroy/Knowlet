@@ -22,39 +22,31 @@ export default function SignupForm() {
       return;
     }
 
-    const userId =
-      name.split(" ")[0] + "@" + Math.floor(Math.random() * 9000 + 1000);
-
     try {
       setLoading(true);
 
-      const user = {
-        id: userId,
-        name,
-        email,
-        password,
-      };
-
-      const res = await fetch(
-        "https://knowlet.in/.netlify/functions/set-data",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(user),
+      const res = await fetch("/api/auth/signup", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
         },
-      );
+        body: JSON.stringify({
+          name,
+          email,
+          password,
+        }),
+      });
 
-      const result = await res.json();
+      const { user, error } = await res.json();
 
-      if (!result.success) {
-        throw new Error(result.error);
+      if (!user || error) {
+        alert(error.message);
+        return;
       }
 
-      localStorage.setItem("knowletUser", JSON.stringify(user));
+      localStorage.setItem("knowlet-usr", JSON.stringify(user));
 
-      alert(`Successfully Signed Up\nYour User ID: ${userId}`);
+      alert(`Successfully Signed Up\nYour User ID: ${user.id}`);
 
       window.location.href = "/profile";
     } catch (error) {

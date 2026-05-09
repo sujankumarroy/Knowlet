@@ -23,34 +23,25 @@ export default function SigninForm() {
     try {
       setLoading(true);
 
-      const res = await fetch(
-        "https://knowlet.in/.netlify/functions/get-data",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            email,
-            password,
-          }),
+      const res = await fetch("/api/auth/signin", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
         },
-      );
+        body: JSON.stringify({
+          email,
+          password,
+        }),
+      });
 
-      const result = await res.json();
+      const { user, error } = await res.json();
 
-      if (!result.success) {
-        throw new Error(result.error);
-      }
-
-      const data = result.data;
-
-      if (!data[0]) {
+      if (!user || error) {
         alert("Invalid credentials");
         return;
       }
 
-      localStorage.setItem("knowletUser", JSON.stringify(data[0]));
+      localStorage.setItem("knowlet-user", JSON.stringify(user));
 
       alert("Successfully Logged In");
 

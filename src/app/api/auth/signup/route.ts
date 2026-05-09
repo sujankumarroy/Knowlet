@@ -54,6 +54,8 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error }, { status: 501 });
     }
 
+    delete user.password;
+
     const secret = new TextEncoder().encode(process.env.JWT_SECRET);
     const jwtToken = await new SignJWT({ user_id: user.id })
       .setProtectedHeader({ alg: "HS256" })
