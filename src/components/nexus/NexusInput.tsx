@@ -6,7 +6,7 @@ export default function NexusInput({ mode, setMessages, messages }: any) {
   const [text, setText] = useState("");
   const [loading, setLoading] = useState(false);
 
-  const API_URL = "https://knowlet.in/.netlify/functions/gemini";
+  const API_URL = "api/nexus/chat";
 
   const send = async () => {
     if (!text.trim() || loading) return;
@@ -28,11 +28,11 @@ export default function NexusInput({ mode, setMessages, messages }: any) {
         body: JSON.stringify({ text, mode }),
       });
 
-      const data = await res.json();
+      const { success, type, message, quiz, retryAfter } = await res.json();
 
       const aiMsg = {
         sender: "ai",
-        text: data.message || "No response",
+        text: message || "No response",
         time: new Date().toLocaleTimeString(),
       };
 
