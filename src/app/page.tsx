@@ -1,4 +1,4 @@
-import Hero from "@/app/components/home/Hero";
+import Hero from "@/app/components/home/Header";
 import SearchBar from "./components/home/SearchBar";
 import Library from "./components/home/Library";
 
