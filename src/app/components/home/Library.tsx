@@ -10,7 +10,7 @@ export default function Library() {
         Library
       </h2>
 
-      <div className="grid grid-cols-[repeat(auto-fit,minmax(200px,1fr))] gap-6 mt-6">
+      <div className="max-w-3xl mx-auto grid grid-cols-[repeat(auto-fit,minmax(200px,1fr))] gap-6 mt-6">
         {cards.map((c, i) => (
           <div
             key={i}
