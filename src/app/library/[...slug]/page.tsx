@@ -1,5 +1,4 @@
-import styles from "./library.module.css";
-import connectDb from "@/lib/db";
+import Content from "@/components/library/Content";
 import { notFound } from "next/navigation";
 
 export default async function Page({
@@ -14,23 +13,9 @@ export default async function Page({
   }
 
   if (slug.length <= 3) return notFound();
-
-  const db = await connectDb();
-
-  const { data, error } = await db
-    .from("resources")
-    .select("*")
-    .eq("resource_path", slug.join("/"));
-
-  console.log("error", error);
-  console.log(data);
-
   return (
-    <article
-      className={styles.container}
-      dangerouslySetInnerHTML={{
-        __html: data?.[0]?.content || "",
-      }}
-    />
+    <div>
+      <Content slug={slug} />
+    </div>
   );
 }
