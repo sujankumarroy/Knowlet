@@ -1,0 +1,339 @@
+/* notes.module.css */
+
+.container {
+  max-width: 900px;
+  margin: 40px auto;
+  padding: 32px;
+  background: #ffffff;
+  color: #212529;
+  border-radius: 12px;
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.08);
+  line-height: 1.8;
+  font-size: 16px;
+  overflow-wrap: break-word;
+}
+
+/* =========================
+   HEADINGS
+========================= */
+
+.container h1,
+.container h2,
+.container h3,
+.container h4,
+.container h5,
+.container h6 {
+  font-weight: 700;
+  line-height: 1.3;
+  margin-top: 2rem;
+  margin-bottom: 1rem;
+}
+
+.container h1 {
+  font-size: 2.4rem;
+  color: #0056b3;
+  border-bottom: 3px solid #0056b3;
+  padding-bottom: 10px;
+  text-align: center;
+}
+
+.container h2 {
+  font-size: 2rem;
+  color: #0d6efd;
+  border-bottom: 2px solid #0d6efd;
+  padding-bottom: 8px;
+}
+
+.container h3 {
+  font-size: 1.6rem;
+  color: #17a2b8;
+  border-bottom: 1px solid #17a2b8;
+  padding-bottom: 6px;
+}
+
+.container h4 {
+  font-size: 1.3rem;
+  color: #343a40;
+}
+
+.container h5 {
+  font-size: 1.1rem;
+  color: #495057;
+}
+
+.container h6 {
+  font-size: 1rem;
+  color: #6c757d;
+}
+
+/* =========================
+   TEXT
+========================= */
+
+.container p {
+  margin: 1rem 0;
+}
+
+.container strong,
+.container b {
+  color: #d9534f;
+  font-weight: 700;
+}
+
+.container em,
+.container i {
+  font-style: italic;
+}
+
+.container mark {
+  background: #fff3cd;
+  padding: 2px 4px;
+  border-radius: 4px;
+}
+
+.container small {
+  font-size: 0.85rem;
+}
+
+.container del {
+  text-decoration: line-through;
+}
+
+.container ins {
+  text-decoration: underline;
+}
+
+/* =========================
+   LINKS
+========================= */
+
+.container a {
+  color: #0d6efd;
+  text-decoration: none;
+  transition: 0.2s;
+}
+
+.container a:hover {
+  text-decoration: underline;
+  color: #084298;
+}
+
+/* =========================
+   LISTS
+========================= */
+
+.container ul,
+.container ol {
+  margin: 1rem 0;
+  padding-left: 2rem;
+}
+
+.container ul {
+  list-style-type: square;
+}
+
+.container ol {
+  list-style-type: decimal;
+}
+
+.container li {
+  margin: 0.5rem 0;
+}
+
+/* =========================
+   BLOCKQUOTE
+========================= */
+
+.container blockquote {
+  background: #f1f3f5;
+  border-left: 5px solid #0d6efd;
+  margin: 1.5rem 0;
+  padding: 1rem 1.5rem;
+  font-style: italic;
+  border-radius: 6px;
+  color: #495057;
+}
+
+/* =========================
+   CODE
+========================= */
+
+.container code {
+  background: #f8f9fa;
+  color: #d63384;
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-family: monospace;
+  font-size: 0.95rem;
+}
+
+.container pre {
+  background: #212529;
+  color: #f8f9fa;
+  padding: 1rem;
+  border-radius: 8px;
+  overflow-x: auto;
+  margin: 1.5rem 0;
+}
+
+.container pre code {
+  background: transparent;
+  color: inherit;
+  padding: 0;
+}
+
+/* =========================
+   TABLES
+========================= */
+
+.container table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1.5rem 0;
+}
+
+.container th,
+.container td {
+  border: 1px solid #dee2e6;
+  padding: 12px;
+  text-align: left;
+}
+
+.container th {
+  background: #f1f3f5;
+  font-weight: 700;
+}
+
+.container tr:nth-child(even) {
+  background: #f8f9fa;
+}
+
+/* =========================
+   IMAGES & MEDIA
+========================= */
+
+.container img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 8px;
+  margin: 1rem 0;
+}
+
+.container video,
+.container iframe {
+  max-width: 100%;
+  border-radius: 8px;
+  margin: 1rem 0;
+}
+
+/* =========================
+   HORIZONTAL RULE
+========================= */
+
+.container hr {
+  border: none;
+  border-top: 1px solid #dee2e6;
+  margin: 2rem 0;
+}
+
+/* =========================
+   DETAILS
+========================= */
+
+.container details {
+  background: #f8f9fa;
+  padding: 1rem;
+  border-radius: 6px;
+  margin: 1rem 0;
+}
+
+.container summary {
+  cursor: pointer;
+  font-weight: 600;
+}
+
+/* =========================
+   FORM ELEMENTS
+========================= */
+
+.container input,
+.container textarea,
+.container select,
+.container button {
+  font: inherit;
+}
+
+.container button {
+  background: #0d6efd;
+  color: white;
+  border: none;
+  padding: 10px 16px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.container button:hover {
+  background: #0b5ed7;
+}
+
+/* =========================
+   CUSTOM CLASSES
+========================= */
+
+.container .toc {
+  background: #f8f9fa;
+  border: 1px solid #dee2e6;
+  padding: 1rem;
+  border-radius: 8px;
+  margin-bottom: 2rem;
+}
+
+.container .toc h2 {
+  margin-top: 0;
+  border: none;
+}
+
+.container .toc ul {
+  list-style: none;
+  padding-left: 0;
+}
+
+.container .toc li {
+  margin: 0.5rem 0;
+}
+
+.container .exam-tip {
+  background: #fff3cd;
+  border-left: 5px solid #ffc107;
+  padding: 1rem;
+  margin: 1.5rem 0;
+  border-radius: 6px;
+}
+
+/* =========================
+   RESPONSIVE
+========================= */
+
+@media (max-width: 768px) {
+  .container {
+    padding: 20px;
+    margin: 20px;
+  }
+
+  .container h1 {
+    font-size: 2rem;
+  }
+
+  .container h2 {
+    font-size: 1.7rem;
+  }
+
+  .container h3 {
+    font-size: 1.4rem;
+  }
+
+  .container table {
+    display: block;
+    overflow-x: auto;
+  }
+}
