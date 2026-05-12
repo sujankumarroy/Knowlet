@@ -46,7 +46,7 @@ export default function ProfileMenu() {
         className="overflow-hidden rounded-full"
       >
         <img
-          src={user.picture || "/images/demo_pp.jpg"}
+          src={user?.picture || "/images/demo_pp.jpg"}
           alt="user"
           className="h-10 w-10 rounded-full object-cover"
         />
@@ -60,7 +60,7 @@ export default function ProfileMenu() {
                 router.push("/profile");
                 setOpen((prev) => !prev);
               }}
-              src={user.picture || "/images/demo_pp.jpg"}
+              src={user?.picture || "/images/demo_pp.jpg"}
               alt="profile"
               className="h-14 w-14 rounded-full object-cover"
             />
