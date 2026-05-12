@@ -1,6 +1,6 @@
 "use client";
 
-import ListPageLayout from "../../components/layout/ListPageLayout";
+import ListPageLayout from "@/components/layout/ListPageLayout";
 
 type Fav = {
   title: string;

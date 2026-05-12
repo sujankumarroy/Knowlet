@@ -17,7 +17,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className="h-dvh py-15 box-border overflow-hidden bg-white">
+      <body className="h-dvh py-15 box-border overflow-hidden bg-gray-100">
         <HeaderProvider>
           <div className="flex h-full flex-col">
             <TopBar />

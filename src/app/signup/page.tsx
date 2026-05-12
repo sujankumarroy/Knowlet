@@ -1,5 +1,5 @@
-import AuthCard from "../../components/auth/AuthCart";
-import SignupForm from "../../components/auth/SignupForm";
+import AuthCard from "@/components/auth/AuthCart";
+import SignupForm from "@/components/auth/SignupForm";
 
 export default function SignupPage() {
   return (
