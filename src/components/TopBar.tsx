@@ -3,6 +3,7 @@
 import { useAuth } from "@/context/AuthContext";
 import { useHeader } from "@/context/HeaderContext";
 import { usePathname, useRouter } from "next/navigation";
+import ProfileMenu from "./profile/ProfileMenu";
 
 export default function TopBar() {
   const { mode } = useHeader();
@@ -38,13 +39,7 @@ export default function TopBar() {
       {/* RIGHT */}
       <div className="flex w-20 justify-end">
         {user ? (
-          <button onClick={() => alert("brief info")}>
-            <img
-              src="/images/demo_pp.jpg"
-              alt="user"
-              className="h-10 w-10 rounded-full"
-            />
-          </button>
+          <ProfileMenu />
         ) : (
           <button
             onClick={() => router.push("/signin")}
