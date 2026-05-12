@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 import BottomNav from "@/components/BottomNav";
 import TopBar from "@/components/TopBar";
-import { HeaderProvider } from "@/context/HeaderContext";
+import { AppProvider } from "@/context/AppContext";
 
 export const metadata: Metadata = {
   title: "Knowlet – Notes & Study Materials",
@@ -18,7 +18,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className="h-dvh py-15 box-border overflow-hidden bg-gray-100">
-        <HeaderProvider>
+        <AppProvider>
           <div className="flex h-full flex-col">
             <TopBar />
             <main className="flex-1 overflow-y-auto">
@@ -26,7 +26,7 @@ export default function RootLayout({
             </main>
             <BottomNav />
           </div>
-        </HeaderProvider>
+        </AppProvider>
       </body>
     </html>
   );
