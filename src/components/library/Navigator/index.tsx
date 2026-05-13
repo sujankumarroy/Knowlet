@@ -32,7 +32,15 @@ export default async function Navigator({
 
   return (
     <>
-      <Header title="title" subtitle="subtitles" path={["dlfk", "sldkjf"]} />
+      <Header
+        title={slug ? data[0].title || slug[depth - 1] : "Semesters"}
+        subtitle={
+          slug
+            ? data[0].description || `Open any ${slug[depth - 1]} to view more.`
+            : "Open any semester to view more."
+        }
+        path={slug ? slug : []}
+      />
       <Main items={!slug ? data : data[0]?.[nextTable]} />
     </>
   );
