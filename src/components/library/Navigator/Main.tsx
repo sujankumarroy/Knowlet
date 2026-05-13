@@ -12,7 +12,7 @@ export default function Main({ items }: { items: Item[] }) {
   const router = useRouter();
 
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 p-4">
+    <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 p-4">
       {items.map((item) => (
         <button
           key={item.path}
