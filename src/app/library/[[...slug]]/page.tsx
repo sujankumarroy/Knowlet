@@ -1,6 +1,7 @@
 import Content from "@/components/library/Content";
 import { notFound } from "next/navigation";
 import ReaderPageClient from "@/components/library/ReaderPageClient";
+import Navigator from "@/components/library/Navigator";
 
 export default async function Page({
   params,
@@ -9,11 +10,15 @@ export default async function Page({
 }) {
   const { slug } = await params;
 
-  if (!slug || slug.length === 0) {
-    return notFound();
+  if (!slug || slug?.length <= 3) {
+    return (
+      <div>
+        <ReaderPageClient>
+          <Navigator slug={slug} />
+        </ReaderPageClient>
+      </div>
+    );
   }
-
-  if (slug.length <= 3) return notFound();
   return (
     <div>
       <ReaderPageClient>
