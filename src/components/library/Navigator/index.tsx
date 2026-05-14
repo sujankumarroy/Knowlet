@@ -12,8 +12,10 @@ type Table = "levels" | "subjects" | "papers" | "resources";
 
 export default async function Navigator({
   slug,
+  variant,
 }: {
-  slug: string[] | null | undefined;
+  slug?: string[];
+  variant?: "home" | "library";
 }) {
   const tables = ["levels", "subjects", "papers", "resources"];
   const depth = !slug ? 0 : slug.length - 1;
@@ -79,7 +81,9 @@ export default async function Navigator({
 
   return (
     <>
-      <Header title={title} subtitle={subtitle} path={path} />
+      {variant !== "home" && (
+        <Header title={title} subtitle={subtitle} path={path} />
+      )}
       <Main items={items} />
     </>
   );
