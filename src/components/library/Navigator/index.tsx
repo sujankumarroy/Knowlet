@@ -41,7 +41,7 @@ export default async function Navigator({
       // "/library/semester-1/ecology/idc-101"
       query = db
         .from("resources")
-        .select("title, description, path")
+        .select("title, description, path, type")
         .like("path", `${slug.join("/")}%`);
       special = true;
       console.log("special");
