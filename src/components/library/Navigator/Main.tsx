@@ -9,23 +9,29 @@ type Item = {
   type: string;
 };
 
-export default function Main({ items }: { items: Item[] }) {
-  const groupedItems = items.reduce(
-    (acc, item) => {
-      if (!acc[item.type]) {
-        acc[item.type] = [];
-      }
+export default function Main({
+  items,
+  resources,
+}: {
+  items: Item[];
+  resources?: boolean;
+}) {
+  let groupedItems: Record<string, Item[]>;
+  let orderedTypes = ["note", "pyq"];
+  if (resources) {
+    groupedItems = items.reduce(
+      (acc, item) => {
+        if (!acc[item.type]) {
+          acc[item.type] = [];
+        }
+        acc[item.type].push(item);
+        return acc;
+      },
+      {} as Record<string, Item[]>,
+    );
+  }
 
-      acc[item.type].push(item);
-
-      return acc;
-    },
-    {} as Record<string, Item[]>,
-  );
-
-  const orderedTypes = ["note", "pyq"];
-
-  return (
+  return resources ? (
     <div className="space-y-8 p-4">
       {orderedTypes.map((type) => {
         const sectionItems = groupedItems[type];
@@ -46,6 +52,12 @@ export default function Main({ items }: { items: Item[] }) {
           </section>
         );
       })}
+    </div>
+  ) : (
+    <div className="grid grid-cols-2 sm:grid-cols-3 gap-4 p-4">
+      {items.map((i, idx) => (
+        <NavigatorBtnCard key={idx} item={i} />
+      ))}
     </div>
   );
 }
