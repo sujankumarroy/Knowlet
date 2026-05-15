@@ -25,7 +25,7 @@ export async function POST(req: NextRequest) {
     const db = await connectDb();
 
     // check existing like
-    const { data: user, error } = await db
+    const { data, error } = await db
       .from("likes")
       .select("id")
       .eq("user_id", payload?.user_id)
@@ -35,7 +35,7 @@ export async function POST(req: NextRequest) {
     if (error) throw new Error(error?.message);
 
     // unlike
-    if (user) {
+    if (data) {
       const { error } = await db
         .from("likes")
         .delete()
