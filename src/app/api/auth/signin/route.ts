@@ -17,7 +17,7 @@ export async function POST(req: NextRequest) {
     const db = await connectDb();
 
     const { data: user, error } = await db
-      .from("users")
+      .from("users_duplicate")
       .select("*")
       .eq("email", email)
       .maybeSingle();
@@ -29,8 +29,8 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    const isMatch = await bcrypt.compare(password, user.password);
-    delete user.password;
+    const isMatch = await bcrypt.compare(password, user.password_hash);
+    delete user.password_hash;
 
     if (!isMatch) {
       return NextResponse.json(

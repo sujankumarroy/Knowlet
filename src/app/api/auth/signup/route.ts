@@ -1,5 +1,5 @@
 import connectDb from "@/lib/db";
-import getId from "@/utils/getId";
+import generateUsername from "@/utils/generateUsername";
 import bcrypt from "bcryptjs";
 import { SignJWT } from "jose";
 import { NextRequest, NextResponse } from "next/server";
@@ -7,9 +7,9 @@ import { NextRequest, NextResponse } from "next/server";
 export async function POST(request: NextRequest) {
   try {
     const { name, email, password } = await request.json();
-    const id = getId(name);
+    const username = generateUsername(name);
 
-    if (!name || !email || !password || !id)
+    if (!name || !email || !password || !username)
       return NextResponse.json(
         { error: { message: "name, email and password are required" } },
         { status: 401 },
@@ -25,7 +25,7 @@ export async function POST(request: NextRequest) {
     const db = await connectDb();
 
     const { data: existUser } = await db
-      .from("users")
+      .from("users_duplicate")
       .select("id")
       .eq("email", email)
       .maybeSingle();
@@ -40,12 +40,12 @@ export async function POST(request: NextRequest) {
     const hashedPassword = await bcrypt.hash(password, 10);
 
     const { data: user, error } = await db
-      .from("users")
+      .from("users_duplicate")
       .insert({
-        id,
+        username,
         name,
         email,
-        password: hashedPassword,
+        password_hash: hashedPassword,
       })
       .select()
       .single();
@@ -54,7 +54,7 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error }, { status: 501 });
     }
 
-    delete user.password;
+    delete user.password_hash;
 
     const secret = new TextEncoder().encode(process.env.JWT_SECRET);
     const jwtToken = await new SignJWT({ user_id: user.id })
