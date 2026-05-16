@@ -3,12 +3,12 @@
 import Link from "next/link";
 import { useState } from "react";
 import Loader from "./Loader";
-import { useRouter } from "next/navigation";
 import { toast } from "sonner";
+import { useAuth } from "@/context/AuthContext";
 
 export default function SigninForm() {
   const [loading, setLoading] = useState(false);
-  const router = useRouter();
+  const { setUser } = useAuth();
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -44,11 +44,10 @@ export default function SigninForm() {
         return;
       }
 
+      setUser(user);
       localStorage.setItem("knowlet-user", JSON.stringify(user));
-
       toast.success("Successfully Signed In");
-
-      router.push("/profile");
+      window.location.href = "/profile";
     } catch (error) {
       console.error(error);
       toast.error("Something went wrong");

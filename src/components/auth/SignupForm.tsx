@@ -3,12 +3,12 @@
 import Link from "next/link";
 import { useState } from "react";
 import Loader from "./Loader";
-import { useRouter } from "next/navigation";
 import { toast } from "sonner";
+import { useAuth } from "@/context/AuthContext";
 
 export default function SignupForm() {
   const [loading, setLoading] = useState(false);
-  const router = useRouter();
+  const { setUser } = useAuth();
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -47,13 +47,12 @@ export default function SignupForm() {
         return;
       }
 
+      setUser(user);
       localStorage.setItem("knowlet-user", JSON.stringify(user));
-
       toast.success("Successfully Signed Up", {
         description: `Your username: ${user.id}`,
       });
-
-      router.push("/profile");
+      window.location.href = "/profile";
     } catch (error) {
       console.error(error);
       toast.error((error as Error).message);

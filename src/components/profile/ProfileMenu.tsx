@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import { useAuth } from "@/context/AuthContext";
 import { useRouter } from "next/navigation";
+import { toast } from "sonner";
 
 export default function ProfileMenu() {
   const { user, setUser } = useAuth();
@@ -27,14 +28,27 @@ export default function ProfileMenu() {
     };
   }, []);
 
-  function handleLogout() {
-    localStorage.removeItem("knowlet-user");
+  async function handleSignout() {
+    try {
+      const res = await fetch("/api/auth/signout", {
+        method: "POST",
+      });
 
-    setUser(null);
+      const { success } = await res.json();
 
-    setOpen(false);
+      if (!success) throw new Error("Failed to Sign Out");
 
-    router.push("/");
+      localStorage.removeItem("knowlet-user");
+      toast.success("Sign Out Successfull.");
+
+      setUser(null);
+      setOpen(false);
+
+      router.push("/");
+    } catch (error) {
+      toast.error("Failed to Sign Out");
+      return;
+    }
   }
 
   if (!user) return null;
@@ -76,10 +90,10 @@ export default function ProfileMenu() {
 
           <div className="mt-4 border-t pt-4">
             <button
-              onClick={handleLogout}
+              onClick={handleSignout}
               className="w-full rounded-xl bg-red-500 px-4 py-2 text-sm font-medium text-white transition hover:opacity-90"
             >
-              Logout
+              Sign Out
             </button>
           </div>
         </div>

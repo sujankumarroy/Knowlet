@@ -1,6 +1,7 @@
 "use client";
 
 import { createContext, useContext, useEffect, useState } from "react";
+import { toast } from "sonner";
 
 type AuthContextType = {
   user: User | null;
@@ -16,8 +17,10 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     try {
       const res = await fetch("/api/auth/me");
       const { data: user, error } = await res.json();
-      if (error) console.log(error);
-      if (!user) console.log(user);
+      if (error || !user) {
+        console.log(error);
+        return;
+      }
       setUser(user);
       localStorage.setItem("knowlet-user", JSON.stringify(user));
     } catch (error) {
@@ -29,7 +32,13 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     const stored = localStorage.getItem("knowlet-user");
 
     if (stored) {
-      setUser(JSON.parse(stored));
+      try {
+        setUser(JSON.parse(stored));
+      } catch (error) {
+        console.error(error);
+        toast.error((error as Error).message);
+        localStorage.removeItem("knowlet-user");
+      }
     }
 
     fetchMe();
