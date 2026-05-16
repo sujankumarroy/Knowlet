@@ -3,12 +3,15 @@
 import { AuthProvider } from "./AuthContext";
 import { HeaderProvider } from "./HeaderContext";
 import { ReaderProvider } from "./ReaderContext";
+import { ToastProvider } from "./ToastContext";
 
 export function AppProvider({ children }: { children: React.ReactNode }) {
   return (
     <AuthProvider>
       <HeaderProvider>
-        <ReaderProvider>{children}</ReaderProvider>
+        <ToastProvider>
+          <ReaderProvider>{children}</ReaderProvider>
+        </ToastProvider>
       </HeaderProvider>
     </AuthProvider>
   );
