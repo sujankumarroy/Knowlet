@@ -21,12 +21,10 @@ export default function AppToaster() {
   return (
     <Toaster
       position={isMobile ? "bottom-center" : "top-right"}
-      offset={isMobile ? { bottom: 80 } : { top: 80, right: 16 }}
       richColors
       toastOptions={{
         classNames: {
-          toast:
-            "mx-4 rounded-2xl border border-slate-200 bg-white shadow-lg sm:mx-0",
+          toast: `${isMobile ? "mb-15" : "mt-15"} rounded-2xl border border-slate-200 bg-white shadow-lg sm:mx-0`,
           title: "text-sm font-semibold text-slate-900",
           description: "text-sm text-slate-500",
           success: "border-green-200",

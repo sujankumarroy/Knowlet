@@ -15,8 +15,8 @@ export default function ProfileCard() {
       </div>
 
       <div>
-        <h1 className="text-xl font-semibold">{user?.name}</h1>
-        <p className="text-gray-500">{user?.email}</p>
+        <h1 className="text-xl font-semibold">{user?.name || "Unknown"}</h1>
+        <p className="text-gray-500">{user?.email || "example@gmail.com"}</p>
       </div>
     </div>
   );
