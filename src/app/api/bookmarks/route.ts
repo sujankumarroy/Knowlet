@@ -31,7 +31,13 @@ export async function GET(req: NextRequest) {
       );
     }
 
-    return NextResponse.json({ data });
+    return NextResponse.json({
+      data: data?.map((b) => ({
+        id: b.id,
+        created_at: b.created_at,
+        resource: b.resources,
+      })),
+    });
   } catch (error) {
     return NextResponse.json(
       { error: { message: "Internal Server Error" } },
