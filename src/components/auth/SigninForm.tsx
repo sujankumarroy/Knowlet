@@ -79,7 +79,7 @@ export default function SigninForm() {
 
         <div className="flex justify-end">
           <Link
-            href="/auth/forgot-password"
+            href="/forgot-password"
             className="text-sm text-blue-600 hover:underline"
           >
             Forgot password?
