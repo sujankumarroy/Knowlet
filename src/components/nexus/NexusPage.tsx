@@ -10,8 +10,8 @@ export default function NexusPage() {
   const [messages, setMessages] = useState<any[]>([]);
 
   return (
-    <div className="h-full flex items-center justify-center">
-      <div className="w-full max-w-xl h-full flex flex-col border border-slate-700 rounded-xl bg-slate-900">
+    <div className="h-full flex items-center justify-center bg-gray-100">
+      <div className="w-full max-w-xl h-full flex flex-col border border-gray-200 rounded-xl bg-white shadow-sm">
         <NexusChat messages={messages} />
 
         {/* <NexusToolbar mode={mode} setMode={setMode} /> */}

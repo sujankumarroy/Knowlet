@@ -48,9 +48,9 @@ export default function NexusInput({ mode, setMessages, messages }: any) {
   };
 
   return (
-    <div className="flex gap-2 p-2 border-t border-slate-700">
+    <div className="flex gap-2 p-3 border-t border-gray-200 bg-white">
       <textarea
-        className="flex-1 bg-slate-800 text-white p-2 rounded-lg resize-none h-10"
+        className="flex-1 bg-gray-100 text-gray-900 p-2 rounded-lg resize-none h-10 outline-none focus:ring-2 focus:ring-blue-400"
         value={text}
         onChange={(e) => setText(e.target.value)}
         onKeyDown={(e) => {
@@ -59,12 +59,13 @@ export default function NexusInput({ mode, setMessages, messages }: any) {
             send();
           }
         }}
+        placeholder="Ask Nexus..."
       />
 
       <button
         onClick={send}
         disabled={loading}
-        className="px-4 bg-green-500 text-black rounded-lg"
+        className="px-4 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition"
       >
         {loading ? "..." : "➤"}
       </button>

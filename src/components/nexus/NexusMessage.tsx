@@ -5,8 +5,8 @@ export default function NexusMessage({ message }: any) {
     <div
       className={`max-w-[75%] px-3 py-2 rounded-xl text-sm whitespace-pre-wrap ${
         isUser
-          ? "bg-green-500 text-black ml-auto"
-          : "bg-slate-800 text-white mr-auto"
+          ? "bg-blue-500 text-white ml-auto"
+          : "bg-white text-gray-800 mr-auto border border-gray-200"
       }`}
     >
       {message.text}
