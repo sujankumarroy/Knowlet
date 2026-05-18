@@ -6,14 +6,15 @@ import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(request: NextRequest) {
   try {
-    const { name, email, password } = await request.json();
+    const { name, email, otp, password } = await request.json();
     const username = generateUsername(name);
 
-    if (!name || !email || !password || !username)
+    if (!name || !email || !otp || !password || !username) {
       return NextResponse.json(
-        { error: { message: "name, email and password are required" } },
+        { error: { message: "All fields are required" } },
         { status: 401 },
       );
+    }
 
     if (password.length < 6) {
       return NextResponse.json(
@@ -24,15 +25,44 @@ export async function POST(request: NextRequest) {
 
     const db = await connectDb();
 
-    const { data: existUser } = await db
-      .from("users_duplicate")
-      .select("id")
+    // Find latest OTP record
+    const { data: otpRow, error: otpError } = await db
+      .from("password_reset_otps")
+      .select("*")
       .eq("email", email)
+      .order("created_at", { ascending: false })
+      .limit(1)
       .maybeSingle();
 
-    if (existUser) {
+    if (otpError || !otpRow) {
       return NextResponse.json(
-        { error: { message: "user already exists" } },
+        { error: { message: "Invalid or expired OTP" } },
+        { status: 400 },
+      );
+    }
+
+    // Check expiry
+    const now = new Date();
+
+    if (now > new Date(otpRow.expires_at)) {
+      // Delete expired OTP
+      await db.from("password_reset_otps").delete().eq("id", otpRow.id);
+
+      return NextResponse.json(
+        { error: { message: "OTP expired" } },
+        { status: 400 },
+      );
+    }
+
+    // Verify OTP
+    const validOtp = await bcrypt.compare(otp, otpRow.otp_hash);
+
+    if (!validOtp) {
+      // Delete expired OTP
+      await db.from("password_reset_otps").delete().eq("id", otpRow.id);
+
+      return NextResponse.json(
+        { error: { message: "Invalid OTP" } },
         { status: 400 },
       );
     }

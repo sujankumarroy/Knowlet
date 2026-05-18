@@ -8,7 +8,59 @@ import { useAuth } from "@/context/AuthContext";
 
 export default function SignupForm() {
   const [loading, setLoading] = useState(false);
+  const [otpLoading, setOtpLoading] = useState(false);
+  const [otpSent, setOtpSent] = useState(false);
+
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [otp, setOtp] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+
   const { setUser } = useAuth();
+
+  async function handleRequestOtp() {
+    // const formData = new FormData(e.currentTarget);
+
+    // const name = formData.get("name") as string;
+    // const email = formData.get("email") as string;
+    // const otp = formData.get("otp") as string;
+
+    if (!name || !email) {
+      toast.warning("Enter name and email first");
+      return;
+    }
+
+    try {
+      setOtpLoading(true);
+
+      const res = await fetch("/api/auth/request-otp", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          name,
+          email,
+        }),
+      });
+
+      const data = await res.json();
+
+      if (data.error) {
+        toast.error(data.error.message);
+        return;
+      }
+
+      setOtpSent(true);
+
+      toast.success("OTP sent to your email");
+    } catch (error) {
+      toast.error((error as Error).message);
+    } finally {
+      setOtpLoading(false);
+    }
+  }
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -17,6 +69,7 @@ export default function SignupForm() {
 
     const name = formData.get("name") as string;
     const email = formData.get("email") as string;
+    const otp = formData.get("otp") as string;
     const password = formData.get("password") as string;
     const confirmPassword = formData.get("confirmPassword") as string;
 
@@ -30,14 +83,8 @@ export default function SignupForm() {
 
       const res = await fetch("/api/auth/signup", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          name,
-          email,
-          password,
-        }),
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name, email, otp, password }),
       });
 
       const { user, error } = await res.json();
@@ -70,6 +117,8 @@ export default function SignupForm() {
           type="text"
           name="name"
           placeholder="Full Name"
+          value={name}
+          onChange={(e) => setName(e.target.value)}
           className="w-full rounded-lg border border-gray-300 px-4 py-3 outline-none focus:border-blue-500"
           required
         />
@@ -78,9 +127,32 @@ export default function SignupForm() {
           type="email"
           name="email"
           placeholder="Email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
           className="w-full rounded-lg border border-gray-300 px-4 py-3 outline-none focus:border-blue-500"
           required
         />
+
+        <div className="flex overflow-hidden rounded-lg border border-gray-300 focus-within:border-blue-500">
+          <input
+            type="text"
+            name="otp"
+            placeholder="OTP"
+            value={otp}
+            onChange={(e) => setOtp(e.target.value)}
+            disabled={!otpSent}
+            className="flex-1 px-4 py-3 outline-none disabled:bg-gray-100"
+          />
+
+          <button
+            type="button"
+            onClick={handleRequestOtp}
+            disabled={otpLoading}
+            className="border-l border-gray-300 px-4 text-sm font-medium text-blue-600 hover:bg-gray-50 disabled:opacity-50"
+          >
+            {otpLoading ? "Sending..." : otpSent ? "Resend" : "Send OTP"}
+          </button>
+        </div>
 
         <input
           type="password"
