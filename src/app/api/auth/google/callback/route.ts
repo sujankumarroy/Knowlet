@@ -47,9 +47,12 @@ export async function GET(req: NextRequest) {
 
   if (error) throw new Error(error.message);
 
+  let isNewUser = false;
+
   if (data) {
     user = data;
   } else {
+    isNewUser = true;
     const newUser = {
       name: user.name,
       email: user.email,
@@ -79,8 +82,12 @@ export async function GET(req: NextRequest) {
     .setExpirationTime("15d")
     .sign(secret);
 
+  const redirectUrl = isNewUser
+    ? `${process.env.NEXT_PUBLIC_APP_URL}/welcome`
+    : `${process.env.NEXT_PUBLIC_APP_URL}`;
+
   // Set cookie
-  const response = NextResponse.redirect(`${process.env.NEXT_PUBLIC_APP_URL}`);
+  const response = NextResponse.redirect(redirectUrl);
 
   response.cookies.set("token", token, {
     httpOnly: true,
