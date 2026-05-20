@@ -14,14 +14,12 @@ export default function SignupForm() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [otp, setOtp] = useState("");
-  const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
 
   const { setUser } = useAuth();
 
   async function handleRequestOtp() {
-    if (!name || !email) {
-      toast.warning("Enter name and email first");
+    if (!email) {
+      toast.warning("Email is required");
       return;
     }
 
@@ -30,13 +28,8 @@ export default function SignupForm() {
 
       const res = await fetch("/api/auth/request-otp", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          name,
-          email,
-        }),
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, type: "signup" }),
       });
 
       const data = await res.json();
