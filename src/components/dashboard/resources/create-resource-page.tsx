@@ -35,7 +35,6 @@ export default function CreateResourcePage() {
       ...details,
       content: rowHtml,
     });
-    console.log(resource);
   }, [parsedHtml, details, rowHtml]);
 
   return (
@@ -88,7 +87,7 @@ export default function CreateResourcePage() {
         <ResourceDetails details={details} setDetails={setDetails} />
 
         {/* Actions */}
-        <ResourceActions />
+        <ResourceActions resource={resource} />
       </div>
     </div>
   );
