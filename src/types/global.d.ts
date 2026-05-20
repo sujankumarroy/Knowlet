@@ -11,3 +11,11 @@ interface User {
   created_at?: string;
   verified_at: string;
 }
+
+type AuthOtpType =
+  | "signup"
+  | "signin"
+  | "set_password"
+  | "reset_password"
+  | "change_password"
+  | "verify_email";

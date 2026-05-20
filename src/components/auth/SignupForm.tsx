@@ -14,20 +14,12 @@ export default function SignupForm() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [otp, setOtp] = useState("");
-  const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
 
   const { setUser } = useAuth();
 
   async function handleRequestOtp() {
-    // const formData = new FormData(e.currentTarget);
-
-    // const name = formData.get("name") as string;
-    // const email = formData.get("email") as string;
-    // const otp = formData.get("otp") as string;
-
-    if (!name || !email) {
-      toast.warning("Enter name and email first");
+    if (!email) {
+      toast.warning("Email is required");
       return;
     }
 
@@ -36,13 +28,8 @@ export default function SignupForm() {
 
       const res = await fetch("/api/auth/request-otp", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          name,
-          email,
-        }),
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, type: "signup" }),
       });
 
       const data = await res.json();
@@ -140,8 +127,8 @@ export default function SignupForm() {
             placeholder="OTP"
             value={otp}
             onChange={(e) => setOtp(e.target.value)}
-            disabled={!otpSent}
             className="flex-1 px-4 py-3 outline-none disabled:bg-gray-100"
+            required={!otpSent}
           />
 
           <button
@@ -177,12 +164,13 @@ export default function SignupForm() {
           Sign Up
         </button>
 
-        {/* <button
+        <button
+          onClick={() => (window.location.href = "/api/auth/google")}
           type="button"
           className="w-full rounded-lg bg-green-600 py-3 font-medium text-white transition hover:bg-green-700"
         >
           Continue with Google
-        </button> */}
+        </button>
 
         <div className="text-center text-sm text-gray-600">
           Already have an account?{" "}

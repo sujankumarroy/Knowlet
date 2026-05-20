@@ -5,11 +5,12 @@ import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(req: NextRequest) {
   try {
-    const { email } = await req.json();
+    const { email, type }: { email: string; type: AuthOtpType } =
+      await req.json();
 
-    if (!email) {
+    if (!email || !type) {
       return NextResponse.json(
-        { error: { message: "Email is required" } },
+        { error: { message: "Email and type are required" } },
         { status: 400 },
       );
     }
@@ -26,11 +27,25 @@ export async function POST(req: NextRequest) {
       .eq("email", email)
       .maybeSingle();
 
-    if (existUser) {
+    if (existUser && type === "signup") {
       return NextResponse.json(
         { error: { message: "user already exists" } },
         { status: 400 },
       );
+    } else if (
+      [
+        "set_password",
+        "reset_password",
+        "change_password",
+        "verify_email",
+      ].includes(type)
+    ) {
+      if (!existUser) {
+        return NextResponse.json(
+          { error: { message: "Unauthorized User" } },
+          { status: 403 },
+        );
+      }
     }
 
     const { error: otpError } = await db.from("password_reset_otps").upsert(
@@ -51,13 +66,18 @@ export async function POST(req: NextRequest) {
       );
     }
 
+    let emailHeader = "";
+    if (type === "signup") emailHeader = "<h2>Email Verification OTP</h2>";
+    else if (type === "set_password")
+      emailHeader = "<h2>Password Reset OTP</h2>";
+
     await resend.emails.send({
       from: "Knowlet Auth <auth@knowlet.in>",
       to: email,
       subject: "Verify Your Email",
       html: `
         <div style="font-family:sans-serif">
-          <h2>Email Verification OTP</h2>
+          ${emailHeader}
           <p>Your OTP is:</p>
           <h1>${otp}</h1>
           <p>This OTP expires in 10 minutes.</p>

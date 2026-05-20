@@ -33,7 +33,11 @@ export async function proxy(req: NextRequest) {
   }
 
   // AUTH
-  if (pathname.startsWith("/admin") || pathname.startsWith("/profile")) {
+  if (
+    pathname.startsWith("/admin") ||
+    pathname.startsWith("/profile") ||
+    pathname.startsWith("/settings/password")
+  ) {
     const token = req.cookies.get("token")?.value;
 
     if (!token) {
@@ -57,5 +61,10 @@ export async function proxy(req: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/notes/:path*", "/admin/:path*", "/profile/:path*"],
+  matcher: [
+    "/notes/:path*",
+    "/admin/:path*",
+    "/profile/:path*",
+    "/settings/password/:path*",
+  ],
 };
