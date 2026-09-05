@@ -8,3 +8,8 @@ export function slugify(value: string): string {
     .replace(/\s+/g, "-")
     .replace(/-+/g, "-");
 }
+
+export function truncateText(text: string, numberOfChars: number = 50) {
+  if (text.length <= numberOfChars) return text;
+  return text.slice(0, numberOfChars) + " ...";
+}
