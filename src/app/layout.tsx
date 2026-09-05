@@ -57,7 +57,7 @@ export default function RootLayout({
           <div className="flex min-h-dvh flex-col">
             <TopBar />
 
-            <main className="flex-1 py-15">{children}</main>
+            <main className="flex-1 pt-15">{children}</main>
 
             <Footer />
 
