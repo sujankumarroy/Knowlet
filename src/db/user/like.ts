@@ -1,5 +1,5 @@
 import { supabase } from "@/lib/supabase";
-import { Likes } from "@/types/resource";
+import { Like } from "@/types/resource";
 
 export async function insertLike(userId: string, resourceId: string) {
   const { error } = await supabase.from("likes").insert({
@@ -19,7 +19,7 @@ export async function getUserLikes(userId: string, limit: number = 50) {
 
   if (error) throw error;
 
-  return data as unknown as Likes[];
+  return data as unknown as Like[];
 }
 
 export async function getUserLikesCount(userId: string) {

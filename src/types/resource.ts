@@ -68,7 +68,7 @@ export interface History {
   resource: ResourceInfo;
 }
 
-export interface Likes {
+export interface Like {
   id: string;
   created_at: string;
   resource: ResourceInfo;
