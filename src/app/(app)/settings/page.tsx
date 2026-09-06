@@ -36,20 +36,6 @@ export default function SettingsPage() {
         },
       ],
     },
-    {
-      title: "Activity",
-      description: "Access your reading history and saved resources.",
-      links: [
-        {
-          label: "Bookmarks",
-          href: "/bookmarks",
-        },
-        {
-          label: "History",
-          href: "/history",
-        },
-      ],
-    },
   ];
 
   return (
