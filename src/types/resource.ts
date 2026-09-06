@@ -56,20 +56,13 @@ export interface BriefResourceInfo {
   path: string;
 }
 
-export interface Bookmark {
+export interface ActivityItem {
   id: string;
   created_at: string;
   resource: ResourceInfo;
 }
 
-export interface History {
-  id: string;
-  created_at: string;
-  resource: ResourceInfo;
-}
-
-export interface Like {
-  id: string;
-  created_at: string;
-  resource: ResourceInfo;
-}
+export type Bookmark = ActivityItem;
+export type Like = ActivityItem;
+export type History = ActivityItem;
+export type Download = ActivityItem;
