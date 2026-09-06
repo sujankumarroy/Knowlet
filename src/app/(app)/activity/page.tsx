@@ -1,9 +1,17 @@
+import { getBookmarks } from "@/actions/user/bookmark";
 import { getDownloads } from "@/actions/user/download";
 import { getHistory } from "@/actions/user/history";
 import { getUserLikes } from "@/actions/user/like";
 import { ResourceInfo } from "@/types/resource";
 import { truncateText } from "@/utils/slugify";
-import { Clock3, Download, Heart, History, TriangleAlert } from "lucide-react";
+import {
+  Bookmark,
+  Clock3,
+  Download,
+  Heart,
+  History,
+  TriangleAlert,
+} from "lucide-react";
 import Link from "next/link";
 
 function ActivitySection<
@@ -88,14 +96,15 @@ function ActivitySection<
 }
 
 export default async function ActivityPage() {
-  const [history, likes, downloads] = await Promise.allSettled([
+  const [history, likes, downloads, bookmarks] = await Promise.allSettled([
     getHistory(20),
     getUserLikes(20),
+    getBookmarks(20),
     getDownloads(20),
   ]);
 
   return (
-    <main className="mx-auto w-full max-w-5xl space-y-10">
+    <main className="mx-auto w-full max-w-5xl space-y-10 py-5">
       <header className="border-b border-border pb-6">
         <div className="flex items-center gap-3">
           <div className="flex size-11 items-center justify-center rounded-2xl bg-primary/10">
@@ -124,6 +133,13 @@ export default async function ActivityPage() {
           icon={Heart}
           items={likes.status === "fulfilled" ? likes.value : []}
           error={likes.status === "rejected"}
+        />
+
+        <ActivitySection
+          title="Bookmarked Resources"
+          icon={Bookmark}
+          items={bookmarks.status === "fulfilled" ? bookmarks.value : []}
+          error={bookmarks.status === "rejected"}
         />
 
         <ActivitySection

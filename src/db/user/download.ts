@@ -5,12 +5,15 @@ export async function getDownloads(userId: string, limit: number = 50) {
   const { data, error } = await supabase
     .from("resource_downloads")
     .select(
-      "id, created_id, resource:resources (id, title, description, path, created_at)",
+      "id, downloaded_at, resource:resources (id, title, description, path, created_at)",
     )
     .eq("user_id", userId)
     .limit(limit);
 
   if (error) throw error;
 
-  return data as unknown as Download[];
+  return data.map((d) => ({
+    ...d,
+    created_at: d.downloaded_at,
+  })) as unknown as Download[];
 }

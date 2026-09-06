@@ -7,10 +7,9 @@ import {
 } from "@/db/user/bookmark";
 import { getAuthenticatedUserId } from "@/lib/auth/getAuthenticatedUserId";
 
-export async function getBookmarks() {
+export async function getBookmarks(limit: number = 50) {
   const userId = await getAuthenticatedUserId();
-
-  return await _getBookmarks(userId);
+  return await _getBookmarks(userId, limit);
 }
 
 export async function bookmarkResource(resourceId: string) {

@@ -12,7 +12,7 @@ export async function insertBookmark(userId: string, resourceId: string) {
   return data;
 }
 
-export async function getBookmarks(userId: string) {
+export async function getBookmarks(userId: string, limit: number = 50) {
   const { data, error } = await supabase
     .from("bookmarks")
     .select(
@@ -29,7 +29,8 @@ export async function getBookmarks(userId: string) {
       `,
     )
     .eq("user_id", userId)
-    .order("created_at", { ascending: false });
+    .order("created_at", { ascending: false })
+    .limit(limit);
 
   if (error) throw error;
 
