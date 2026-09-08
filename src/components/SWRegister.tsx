@@ -26,7 +26,7 @@ export default function SWRegister() {
           await getNotificationPermissionStatus();
         if (notificationPermissionStatus === "granted") {
           try {
-            subscribe();
+            await subscribe();
           } catch {}
         } else if (notificationPermissionStatus === "denied") {
           // TODO: delete subscription of this device using session token

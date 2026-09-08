@@ -4,13 +4,13 @@ import { ChevronRight, Gift, Share2, X } from "lucide-react";
 import { useEffect, useState } from "react";
 
 import { getReferredUsers, getUserReferralCode } from "@/actions/profile";
-import type { ReferredUser } from "@/types/user";
+import type { PublicUser } from "@/types/user";
 
 export default function ReferralCard() {
   const [referralCode, setReferralCode] = useState<string | null>(null);
 
   const [showReferrals, setShowReferrals] = useState(false);
-  const [referredUsers, setReferredUsers] = useState<ReferredUser[]>([]);
+  const [referredUsers, setReferredUsers] = useState<PublicUser[]>([]);
   const [loadingReferrals, setLoadingReferrals] = useState(false);
 
   useEffect(() => {
