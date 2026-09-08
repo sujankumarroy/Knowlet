@@ -1,7 +1,8 @@
-import { getUserByEmail } from "@/db/user";
 import bcrypt from "bcryptjs";
 import { SignJWT } from "jose";
 import { NextRequest, NextResponse } from "next/server";
+
+import { getPasswordHashByEmail, getUserByEmail } from "@/db/user";
 
 export async function POST(req: NextRequest) {
   try {
@@ -14,10 +15,24 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    const user = await getUserByEmail(email)
+    const [user, passwordHash] = await Promise.all([
+      getUserByEmail(email),
+      getPasswordHashByEmail(email),
+    ]);
 
-    const isMatch = await bcrypt.compare(password, user.password_hash);
-    delete user.password_hash;
+    if (!passwordHash) {
+      return NextResponse.json(
+        {
+          error: {
+            message:
+              "Password authentication is not available for this account",
+          },
+        },
+        { status: 401 },
+      );
+    }
+
+    const isMatch = await bcrypt.compare(password, passwordHash);
 
     if (!isMatch) {
       return NextResponse.json(

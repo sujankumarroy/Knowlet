@@ -74,8 +74,6 @@ export async function POST(request: NextRequest) {
       referrer_code: referralCode ?? undefined,
     });
 
-    delete user.password_hash;
-
     const secret = new TextEncoder().encode(process.env.JWT_SECRET);
     const jwtToken = await new SignJWT({ user_id: user.id })
       .setProtectedHeader({ alg: "HS256" })

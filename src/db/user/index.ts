@@ -63,7 +63,7 @@ export async function uploadAvatar(filePath: string, image: File) {
 export async function getUserById(userId: string) {
   const { data, error } = await supabase
     .from("users")
-    .select("name, email, username, picture, role")
+    .select(USER_COLUMNS.full)
     .eq("id", userId)
     .maybeSingle();
 
@@ -77,6 +77,20 @@ export async function getUserPassword(userId: string): Promise<string | null> {
     .from("users")
     .select("password_hash")
     .eq("id", userId)
+    .single();
+
+  if (error) throw error;
+
+  return data.password_hash as string | null;
+}
+
+export async function getPasswordHashByEmail(
+  email: string,
+): Promise<string | null> {
+  const { data, error } = await supabase
+    .from("users")
+    .select("password_hash")
+    .eq("email", email)
     .single();
 
   if (error) throw error;
