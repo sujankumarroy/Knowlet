@@ -1,9 +1,7 @@
 "use client";
 
 import { getCurrentUser } from "@/actions/user";
-import { useRouter } from "next/navigation";
 import { createContext, useContext, useEffect, useState } from "react";
-import { toast } from "sonner";
 
 type AuthContextType = {
   user: User | null;
@@ -21,6 +19,13 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
       try {
         user = await getCurrentUser();
+
+        if (!user) {
+          localStorage.removeItem("knowlet-user");
+          user = null;
+          return;
+        }
+
         localStorage.setItem("knowlet-user", JSON.stringify(user));
       } catch {
         const stored = localStorage.getItem("knowlet-user");

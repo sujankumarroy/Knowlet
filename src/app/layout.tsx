@@ -7,6 +7,7 @@ import { AppProvider } from "@/context/AppContext";
 import SWRegister from "@/components/SWRegister";
 import AdSense from "@/components/AdSense";
 import Footer from "@/components/Footer";
+import Toaster from "@/components/Toaster";
 
 export const metadata: Metadata = {
   title: "Knowlet – Notes & Study Materials",
@@ -65,6 +66,7 @@ export default function RootLayout({
           </div>
 
           <SWRegister />
+          <Toaster />
         </AppProvider>
       </body>
     </html>
