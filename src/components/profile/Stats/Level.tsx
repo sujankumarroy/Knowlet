@@ -2,7 +2,7 @@ import { getHistoryPaths } from "@/db/user/history";
 import StatsBlock from "./Block";
 import { parseResourcePath } from "@/components/dashboard/resources/utils";
 import sortByPath from "@/utils/sortByPath";
-import { error } from "console";
+import { USER_LEVELS } from "@/config/constants";
 
 type HistoryItem = {
   path: string;
@@ -24,18 +24,7 @@ function getLevelData(history: HistoryItem[]) {
   const progressPercent =
     ((xp - previousRequired) / (required - previousRequired)) * 100;
 
-  const levelNames = [
-    "Reader",
-    "Explorer",
-    "Scholar",
-    "Analyst",
-    "Researcher",
-    "Specialist",
-    "Authority",
-    "Master",
-  ];
-
-  const levelName = levelNames[level - 1] || "Legend";
+  const levelName = USER_LEVELS[level - 1] || "Legend";
 
   return {
     level,

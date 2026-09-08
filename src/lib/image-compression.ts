@@ -1,3 +1,5 @@
+import { ALLOWED_IMAGE_TYPES } from "@/config/constants";
+
 /**
  * Compress image to target file size using canvas-based compression.
  * Converts all images to WebP format and iteratively reduces quality until target size is achieved.
@@ -103,16 +105,7 @@ export function validateImageFile(
   }
 
   // Check MIME type - accept common image formats
-  const allowedTypes = [
-    "image/jpeg",
-    "image/png",
-    "image/webp",
-    "image/gif",
-    "image/bmp",
-    "image/svg+xml",
-    "image/tiff",
-  ];
-  if (!allowedTypes.includes(file.type)) {
+  if (!ALLOWED_IMAGE_TYPES.includes(file.type)) {
     return {
       valid: false,
       error: "File is not a valid image",
