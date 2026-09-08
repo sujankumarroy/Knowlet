@@ -1,5 +1,8 @@
+"use client";
+
 import Link from "next/link";
 import { Mail } from "lucide-react";
+import { usePathname } from "next/navigation";
 
 const footerLinks = {
   explore: [
@@ -20,6 +23,12 @@ const footerLinks = {
 };
 
 export default function Footer() {
+  const pathname = usePathname();
+
+  const pagesWithoutFooter = ["/knowva", "/settings", "/dashboard"];
+
+  if (pagesWithoutFooter.includes(pathname)) return null;
+
   return (
     <footer className="pb-15 border-t border-border bg-card text-foreground">
       <div className="mx-auto max-w-6xl px-5 py-12">
