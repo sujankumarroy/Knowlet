@@ -72,6 +72,18 @@ export async function getUserById(userId: string) {
   return data;
 }
 
+export async function getUserPassword(userId: string): Promise<string | null> {
+  const { data, error } = await supabase
+    .from("users")
+    .select("password_hash")
+    .eq("id", userId)
+    .single();
+
+  if (error) throw error;
+
+  return data.password_hash as string | null;
+}
+
 export async function getUserByEmail(email: string) {
   const { data, error } = await supabase
     .from("users")
