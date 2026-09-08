@@ -16,15 +16,11 @@ export async function getCurrentUser() {
 
   const user = await getUserById(userId);
 
-  if (!user) throw new Error("User not found");
-
-  const { id, password_hash, ...safeUser } = user;
-
   void updateUserLastAccessedAt(userId).catch((error) => {
     console.error("Failed to update last accessed time", error);
   });
 
-  return safeUser;
+  return user;
 }
 
 export async function setUserPassword({
