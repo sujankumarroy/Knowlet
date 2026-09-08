@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { Mail } from "lucide-react";
 import { usePathname } from "next/navigation";
+import { ROUTES_WITHOUT_FOOTER } from "@/config/app";
 
 const footerLinks = {
   explore: [
@@ -25,9 +26,7 @@ const footerLinks = {
 export default function Footer() {
   const pathname = usePathname();
 
-  const pagesWithoutFooter = ["/knowva", "/settings", "/dashboard"];
-
-  if (pagesWithoutFooter.includes(pathname)) return null;
+  if (ROUTES_WITHOUT_FOOTER.includes(pathname)) return null;
 
   return (
     <footer className="pb-15 border-t border-border bg-card text-foreground">
