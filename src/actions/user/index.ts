@@ -10,6 +10,7 @@ import {
   updateUserLastAccessedAt,
 } from "@/db/user";
 import { getAuthenticatedUserId } from "@/lib/auth/getAuthenticatedUserId";
+import { User } from "@/types/user";
 
 export async function getCurrentUser() {
   const userId = await getAuthenticatedUserId();
@@ -20,7 +21,7 @@ export async function getCurrentUser() {
     console.error("Failed to update last accessed time", error);
   });
 
-  return user;
+  return user as User;
 }
 
 export async function getUserPassword() {

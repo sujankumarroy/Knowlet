@@ -1,6 +1,7 @@
 "use client";
 
 import { getCurrentUser } from "@/actions/user";
+import { User } from "@/types/user";
 import { createContext, useContext, useEffect, useState } from "react";
 
 type AuthContextType = {
