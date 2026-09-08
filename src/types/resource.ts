@@ -42,32 +42,27 @@ export interface Resource {
   updated_at?: string;
 }
 
+export interface ResourceInfo {
+  id: string;
+  title: string;
+  description: string;
+  path: string;
+  created_at: string;
+}
+
 export interface BriefResourceInfo {
   id: string;
   target: string;
   path: string;
 }
 
-export interface Bookmark {
+export interface ActivityItem {
   id: string;
   created_at: string;
-  resource: {
-    id: string;
-    title: string;
-    description: string;
-    path: string;
-    created_at: string;
-  };
+  resource: ResourceInfo;
 }
 
-export interface History {
-  id: string;
-  created_at: string;
-  resource: {
-    id: string;
-    title: string;
-    description: string;
-    path: string;
-    created_at: string;
-  };
-}
+export type Bookmark = ActivityItem;
+export type Like = ActivityItem;
+export type History = ActivityItem;
+export type Download = ActivityItem;

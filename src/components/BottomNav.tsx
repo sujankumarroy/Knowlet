@@ -1,7 +1,7 @@
 "use client";
 
 import { usePathname, useRouter } from "next/navigation";
-import { Home, Bookmark, Bot, History, User } from "lucide-react";
+import { Home, Bookmark, Bot, User, BookOpen } from "lucide-react";
 
 type NavItem = {
   href: string;
@@ -27,9 +27,9 @@ export default function BottomNav() {
       icon: <Home className="w-6 h-6" />,
     },
     {
-      href: "/bookmarks",
-      label: "Bookmarks",
-      icon: <Bookmark className="w-6 h-6" />,
+      href: "/library",
+      label: "Library",
+      icon: <BookOpen className="w-6 h-6" />,
     },
     {
       href: "/knowva",
@@ -37,9 +37,9 @@ export default function BottomNav() {
       icon: <Bot className="w-6 h-6" />,
     },
     {
-      href: "/history",
-      label: "History",
-      icon: <History className="w-6 h-6" />,
+      href: "/bookmarks",
+      label: "Bookmarks",
+      icon: <Bookmark className="w-6 h-6" />,
     },
     {
       href: "/profile",
