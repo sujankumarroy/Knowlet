@@ -112,8 +112,10 @@ export function ReaderProvider({ children }: { children: React.ReactNode }) {
     loadResStats();
     loadNearByResources();
 
-    const timer = setTimeout(() => {
-      addViewHistory(currentResourceId);
+    const timer = setTimeout(async () => {
+      try {
+        await addViewHistory(currentResourceId);
+      } catch {}
     }, 10000);
 
     return () => clearTimeout(timer);
