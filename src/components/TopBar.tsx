@@ -64,13 +64,6 @@ export default function TopBar() {
 
   const router = useRouter();
   const pathname = usePathname();
-  const isUtilityRoute = [
-    "/signin",
-    "/signup",
-    "/forgot-password",
-    "/forbidden",
-    "/dashboard",
-  ].some((path) => pathname.startsWith(path));
 
   const handleShare = async () => {
     try {

@@ -2,6 +2,7 @@
 
 import { usePathname, useRouter } from "next/navigation";
 import { Home, Bookmark, Bot, User, BookOpen } from "lucide-react";
+import { FULL_SCREEN_ROUTES } from "@/config/app";
 
 type NavItem = {
   href: string;
@@ -13,12 +14,9 @@ export default function BottomNav() {
   const pathname = usePathname();
   const router = useRouter();
 
-  const hideNavigation = [
-    "/signin",
-    "/signup",
-    "/forgot-password",
-    "/forbidden",
-  ].some((path) => pathname.startsWith(path));
+  const hideNavigation = FULL_SCREEN_ROUTES.some((path) =>
+    pathname.startsWith(path),
+  );
 
   const navItems: NavItem[] = [
     {

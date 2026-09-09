@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { verifyAdmin, verifyJwt } from "./lib/auth";
+import { PROTECTED_ROUTES } from "./config/app";
 
 function slugify(value: string) {
   return value.replace(/_/g, "-");
@@ -46,16 +47,7 @@ export async function proxy(req: NextRequest) {
   }
 
   // AUTH
-  if (
-    pathname.startsWith("/profile") ||
-    pathname.startsWith("/history") ||
-    pathname.startsWith("/knowva") ||
-    pathname.startsWith("/knowva") ||
-    pathname.startsWith("/bookmarks") ||
-    pathname.startsWith("/settings") ||
-    pathname.startsWith("/notifications") ||
-    pathname.startsWith("/settings/password")
-  ) {
+  if (PROTECTED_ROUTES.some((route) => pathname.startsWith(route))) {
     const { ok } = await verifyJwt(token);
 
     if (!ok) return redirectToSignin(req);

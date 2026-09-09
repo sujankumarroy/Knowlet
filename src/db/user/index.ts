@@ -1,4 +1,17 @@
 import { supabase } from "@/lib/supabase";
+import { User } from "@/types/user";
+
+export const USER_COLUMNS = {
+  basic: "id, name, username",
+
+  public: "id, name, username, picture",
+
+  profile: "id, name, username, picture, age, stream, standard, fav_subject",
+
+  auth: "id, email, role, is_active",
+
+  full: "id, name, username, email, age, picture, stream, standard, fav_subject, role, is_active, created_at, updated_at",
+} as const;
 
 export async function updateUserLastAccessedAt(userId: string) {
   const { error } = await supabase
@@ -20,12 +33,12 @@ export async function createUser(newUser: {
   const { data, error } = await supabase
     .from("users")
     .insert(newUser)
-    .select()
+    .select(USER_COLUMNS.full)
     .maybeSingle();
 
   if (error) throw error;
 
-  return data;
+  return data as User;
 }
 
 export async function getUserAllEmails() {
@@ -50,7 +63,7 @@ export async function uploadAvatar(filePath: string, image: File) {
 export async function getUserById(userId: string) {
   const { data, error } = await supabase
     .from("users")
-    .select()
+    .select(USER_COLUMNS.full)
     .eq("id", userId)
     .maybeSingle();
 
@@ -59,16 +72,42 @@ export async function getUserById(userId: string) {
   return data;
 }
 
+export async function getUserPassword(userId: string): Promise<string | null> {
+  const { data, error } = await supabase
+    .from("users")
+    .select("password_hash")
+    .eq("id", userId)
+    .single();
+
+  if (error) throw error;
+
+  return data.password_hash as string | null;
+}
+
+export async function getPasswordHashByEmail(
+  email: string,
+): Promise<string | null> {
+  const { data, error } = await supabase
+    .from("users")
+    .select("password_hash")
+    .eq("email", email)
+    .single();
+
+  if (error) throw error;
+
+  return data.password_hash as string | null;
+}
+
 export async function getUserByEmail(email: string) {
   const { data, error } = await supabase
     .from("users")
-    .select()
+    .select(USER_COLUMNS.full)
     .eq("email", email)
     .maybeSingle();
 
   if (error) throw error;
 
-  return data;
+  return data as User;
 }
 
 export async function getEmailByUserId(userId: string) {
@@ -173,10 +212,10 @@ export async function updateUserInfo(
       updated_at: new Date().toISOString(),
     })
     .eq("id", userId)
-    .select()
+    .select(USER_COLUMNS.full)
     .maybeSingle();
 
   if (error) throw error;
 
-  return data;
+  return data as User;
 }

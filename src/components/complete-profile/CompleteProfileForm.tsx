@@ -7,6 +7,7 @@ import PersonalInfoSection from "./PersonalInfoSection";
 import AcademicInfoSection from "./AcademicInfoSection";
 import { toast } from "sonner";
 import { Loader2Icon } from "lucide-react";
+import { User } from "@/types/user";
 
 export default function CompleteProfileForm() {
   const [loading, setLoading] = useState(false);
@@ -25,7 +26,7 @@ export default function CompleteProfileForm() {
     setForm({
       picture: user?.picture || "/images/demo_pp.jpg",
       name: user?.name || "",
-      age: user?.age || "",
+      age: String(user?.age) || "",
       stream: user?.stream || "",
       standard: user?.standard || "",
       fav_subject: user?.fav_subject || "",

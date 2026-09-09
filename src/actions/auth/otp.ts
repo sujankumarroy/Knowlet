@@ -6,6 +6,15 @@ import { getUserIdByEmail } from "@/db/user";
 import { upsertOtp } from "@/db/auth/otp";
 import { sendOtpEmail } from "@/services/email/send";
 
+type AuthOtpType =
+  | "signup"
+  | "signin"
+  | "set_password"
+  | "reset_password"
+  | "forgot_password"
+  | "change_password"
+  | "verify_email";
+
 export async function sendAuthOtp({
   email: _email,
   type,

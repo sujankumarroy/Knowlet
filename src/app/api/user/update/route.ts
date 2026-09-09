@@ -19,9 +19,6 @@ export async function POST(req: NextRequest) {
       fav_subject: body.fav_subject,
     });
 
-    delete user.id;
-    delete user.password_hash;
-
     return NextResponse.json({ data: user });
   } catch (error) {
     return apiError("Server Error", 500);

@@ -4,27 +4,29 @@ import bcrypt from "bcryptjs";
 
 import { deleteOtp, findOtpByEmail } from "@/db/auth/otp";
 import {
-  getUserByEmail,
   getUserById,
+  getUserPassword as _getUserPassword,
   updatePassword,
   updateUserLastAccessedAt,
 } from "@/db/user";
 import { getAuthenticatedUserId } from "@/lib/auth/getAuthenticatedUserId";
+import { User } from "@/types/user";
 
 export async function getCurrentUser() {
   const userId = await getAuthenticatedUserId();
 
   const user = await getUserById(userId);
 
-  if (!user) throw new Error("User not found");
-
-  const { id, password_hash, ...safeUser } = user;
-
   void updateUserLastAccessedAt(userId).catch((error) => {
     console.error("Failed to update last accessed time", error);
   });
 
-  return safeUser;
+  return user as User;
+}
+
+export async function getUserPassword() {
+  const userId = await getAuthenticatedUserId();
+  return await _getUserPassword(userId);
 }
 
 export async function setUserPassword({
@@ -85,14 +87,12 @@ export async function changeUserPassword({
   }
 
   // Fetch User
-  const user = await getUserByEmail(email);
+  const password_hash = await getUserPassword();
 
-  if (!user) throw new Error("User doesn't exist with this email");
-
-  if (!user.password_hash) throw new Error("Password doesn't exist");
+  if (!password_hash) throw new Error("Password doesn't exist");
 
   // Verify Password
-  const isMatch = await bcrypt.compare(oldPassword, user.password_hash);
+  const isMatch = await bcrypt.compare(oldPassword, password_hash);
 
   if (!isMatch) throw new Error("Invalid password");
 
