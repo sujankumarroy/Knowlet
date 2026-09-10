@@ -1,9 +1,13 @@
 import { gemini } from "@/lib/gemini";
 import { sleep } from "@/utils/sleep";
 import { DEFAULT_MODEL, ModelId } from "@/config/ai";
+import { quizSchema } from "./generation/quiz";
+import { createResourceSchema } from "./generation/create-resource";
+import { Mode } from "@/types/knowva";
 
 type GenerateOptions = {
   prompt: string;
+  mode?: Mode;
   model?: ModelId;
   retries?: number;
 };
@@ -49,16 +53,31 @@ export async function generate({
 
 export async function generateStream({
   prompt,
+  mode = "chat",
   model = DEFAULT_MODEL,
   retries = 3,
 }: GenerateOptions): Promise<ReadableStream<any>> {
   let lastError: unknown;
 
+  const responseSchema = {
+    quiz: quizSchema,
+    "create-resource": createResourceSchema,
+  } as const;
+
   for (let attempt = 1; attempt <= retries; attempt++) {
     try {
+      const config =
+        mode === "create-resource"
+          ? {
+              responseMimeType: "application/json",
+              responseSchema: responseSchema[mode],
+            }
+          : undefined;
+
       const stream = await gemini.models.generateContentStream({
-        model: model,
+        model,
         contents: prompt,
+        config,
       });
 
       const encoder = new TextEncoder();

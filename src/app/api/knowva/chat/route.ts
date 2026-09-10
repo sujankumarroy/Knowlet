@@ -1,11 +1,11 @@
 import { NextRequest } from "next/server";
 
 import { authGate } from "@/lib/auth/authGate";
-import { generatePrompt } from "@/services/knowva/generation";
 import { buildDefaultPrompt } from "@/services/knowva/generation/default";
 import { generateStream, extractMemories } from "@/services/knowva";
 import { createMemories, getMemories } from "@/db/knowva/memory";
 import { fetchMessages } from "@/db/knowva/message";
+import { generatePrompt } from "@/services/knowva/generation";
 
 export async function POST(req: NextRequest) {
   try {
@@ -63,7 +63,7 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    const stream = await generateStream({ prompt, model });
+    const stream = await generateStream({ prompt, mode, model });
 
     return new Response(stream, {
       headers: {

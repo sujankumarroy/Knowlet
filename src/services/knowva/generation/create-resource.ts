@@ -1,32 +1,26 @@
+import { Type } from "@google/genai";
+
+export const createResourceSchema = {
+  type: Type.OBJECT,
+  properties: {
+    title: {
+      type: Type.STRING,
+    },
+    description: {
+      type: Type.STRING,
+    },
+    resource: {
+      type: Type.STRING,
+    },
+  },
+  required: ["title", "description", "resource"],
+};
+
 export function buildCreateResourcePrompt(syllabus: string): string {
   return `
 You are Knowva, Knowlet’s AI learning assistant.
 
 Your task is to convert the provided syllabus into a complete, exam-ready study resource for students.
-
-========================
-STRICT OUTPUT FORMAT
-========================
-
-- Output MUST be valid JSON only.
-- Do NOT use Markdown.
-- Do NOT include explanations, comments, or extra text outside JSON.
-- Return exactly ONE JSON object.
-- The output must start with { and end with }.
-
-Required JSON structure:
-
-{
-  "title": "string",
-  "description": "string",
-  "resource": "HTML string"
-}
-
-IMPORTANT:
-- The "resource" field MUST contain the complete HTML content as a string value.
-- Never output HTML outside the "resource" field.
-- The final response must contain only the JSON object.
-- Escape characters correctly so the JSON remains valid.
 
 ========================
 FIELD REQUIREMENTS
@@ -181,7 +175,7 @@ Use semantic HTML.
 
 IMPORTANT:
 - Do NOT use inline CSS or style attributes.
-- Do NOT add custom CSS classes.
+- Do NOT add custom CSS classes except toc on the Table of Contents container.
 
 Required hierarchy:
 
@@ -222,7 +216,9 @@ TABLE OF CONTENTS
 
 At the beginning of the HTML content, include a clickable table of contents.
 
-Rules:
+IMPORTANT:
+- The Table of Contents container MUST use class="toc".
+- Do NOT use class="toc" anywhere else.
 - Every major topic must have a unique meaningful ID.
 - TOC links must use anchor links.
 
@@ -276,10 +272,6 @@ FINAL VALIDATION
 
 Before responding, verify:
 
-✓ Output is valid JSON only
-✓ Contains exactly: title, description, resource
-✓ resource contains HTML string only
-✓ No HTML exists outside resource
 ✓ No Markdown exists
 ✓ All syllabus topics are covered
 ✓ HTML is valid
