@@ -1,8 +1,8 @@
 import { NextRequest } from "next/server";
 
 import { authGate } from "@/lib/auth/authGate";
-import { generatePrompt } from "@/services/knowva/prompts";
-import { buildDefaultPrompt } from "@/services/knowva/prompts/default";
+import { generatePrompt } from "@/services/knowva/generation";
+import { buildDefaultPrompt } from "@/services/knowva/generation/default";
 import { generateStream, extractMemories } from "@/services/knowva";
 import { createMemories, getMemories } from "@/db/knowva/memory";
 import { fetchMessages } from "@/db/knowva/message";
